@@ -2,6 +2,7 @@ package xyz.jamesnuge.slicktest;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
+import xyz.jamesnuge.slicktest.sprites.BarneySprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Engine extends BasicGame {
     public final GameInfo gameInfo = new GameInfo();
     public final Rectangle testRect = new Rectangle(400,300, 10, 10);
     public List<KeyHandler<Rectangle>> rectangleKeyHandlers = new ArrayList<>();
+    public BarneySprite barney;
 
     public Engine() {
         super(TITLE);
@@ -32,10 +34,8 @@ public class Engine extends BasicGame {
 
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
-        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_UP, (updateInfo, rectangle) -> rectangle.setY(rectangle.getY() - (speed * updateInfo.i)), testRect));
-        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_DOWN, (updateInfo, rectangle) -> rectangle.setY(rectangle.getY() + (speed * updateInfo.i)), testRect));
-        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_LEFT, (updateInfo, rectangle) -> rectangle.setX(rectangle.getX() - (speed * updateInfo.i)), testRect));
-        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_RIGHT, (updateInfo, rectangle) -> rectangle.setX(rectangle.getX() + (speed * updateInfo.i)), testRect));
+        addKeyHandlers();
+        barney = new BarneySprite();
     }
 
     @Override
@@ -46,6 +46,14 @@ public class Engine extends BasicGame {
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         graphics.draw(testRect);
+        barney.getSprite(0,0).draw(100,100);
+    }
+
+    private void addKeyHandlers() {
+        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_UP, (updateInfo, rectangle) -> rectangle.setY(rectangle.getY() - (speed * updateInfo.i)), testRect));
+        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_DOWN, (updateInfo, rectangle) -> rectangle.setY(rectangle.getY() + (speed * updateInfo.i)), testRect));
+        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_LEFT, (updateInfo, rectangle) -> rectangle.setX(rectangle.getX() - (speed * updateInfo.i)), testRect));
+        rectangleKeyHandlers.add(new KeyHandler<>(Input.KEY_RIGHT, (updateInfo, rectangle) -> rectangle.setX(rectangle.getX() + (speed * updateInfo.i)), testRect));
     }
 
 
