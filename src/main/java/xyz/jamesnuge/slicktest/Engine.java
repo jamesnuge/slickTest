@@ -1,8 +1,9 @@
 package xyz.jamesnuge.slicktest;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
-import xyz.jamesnuge.slicktest.sprites.BarneySprite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ public class Engine extends BasicGame {
     public final GameInfoWrapper gameInfo = new GameInfoWrapper();
     public final Rectangle testRect = new Rectangle(400,300, 10, 10);
     public List<KeyHandler<Rectangle>> rectangleKeyHandlers = new ArrayList<>();
-    public BarneySprite barney;
+
+    public World world = new World(new Vec2(0.0f, -10.0f));
 
     public Engine() {
         super(TITLE);
@@ -34,7 +36,8 @@ public class Engine extends BasicGame {
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
         addKeyHandlers();
-        barney = new BarneySprite();
+
+        world.setAllowSleep(true);
     }
 
     @Override
@@ -45,7 +48,6 @@ public class Engine extends BasicGame {
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         graphics.draw(testRect);
-        barney.getSprite(0,0).draw(100,100);
     }
 
     private void addKeyHandlers() {
