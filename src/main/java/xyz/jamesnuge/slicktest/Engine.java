@@ -11,8 +11,7 @@ public class Engine extends BasicGame {
 
     public static final String TITLE = "Slick Test";
     public float speed = 0.25f;
-    public Input gameInput;
-    public final GameInfo gameInfo = new GameInfo();
+    public final GameInfoWrapper gameInfo = new GameInfoWrapper();
     public final Rectangle testRect = new Rectangle(400,300, 10, 10);
     public List<KeyHandler<Rectangle>> rectangleKeyHandlers = new ArrayList<>();
     public BarneySprite barney;

@@ -2,16 +2,16 @@ package xyz.jamesnuge.slicktest;
 
 import org.newdawn.slick.GameContainer;
 
-public class GameInfo {
+public class GameInfoWrapper {
     public GameContainer gameContainer;
     public int i;
 
-    public GameInfo(GameContainer gameContainer, int i) {
+    public GameInfoWrapper(GameContainer gameContainer, int i) {
         this.gameContainer = gameContainer;
         this.i = i;
     }
 
-    public GameInfo() {
+    public GameInfoWrapper() {
     }
 
     public void update(GameContainer gameContainer, int i) {
