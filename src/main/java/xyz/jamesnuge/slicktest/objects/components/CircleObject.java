@@ -17,37 +17,45 @@
 
 package xyz.jamesnuge.slicktest.objects.components;
 
-import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Shape;
+import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class CircleObject extends Circle {
-    public CircleShape shape = new CircleShape();
-    public FixtureDef fixture = new FixtureDef();
-    private boolean isCreated = false;
-    private Body body;
+public class CircleObject extends Body implements Updatable {
+    public Circle graphicalObject;
+    public float radius;
 
 
-    public CircleObject(float centerPointX, float centerPointY, float radius, float density, float friction, float restitution) {
-        super(centerPointX, centerPointY, radius);
-        setPhysicalProperties(radius, density, friction, restitution);
+    public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef, FixtureDef fixtureDef) {
+        super(bodyDef, world);
+        this.createFixture(fixtureDef);
+        this.radius = radius;
+        graphicalObject = new Circle(pos.x, pos.y, radius);
     }
 
-    private void setPhysicalProperties(float radius, float density, float friction, float restitution) {
-        shape.m_radius = radius;
-        fixture.density = density;
-        fixture.friction = friction;
-        fixture.restitution = restitution;
-        fixture.shape = shape;
+    public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef) {
+        super(bodyDef, world);
+        this.createFixture(FixtureDefinitions.getCircleFixtureDefinition(radius));
+        this.radius = radius;
+        graphicalObject = new Circle(pos.x, pos.y, radius);
     }
 
-    public boolean isCreated() {
-        return isCreated;
+    public Vec2 getCenterPoint() {
+        return new Vec2(this.getPosition().x - radius, this.getPosition().y - radius);
     }
 
-    public void create(World world) {
+    public Shape getDrawableObject() {
+        return graphicalObject;
+    }
 
+    @Override
+    public void update() {
+        graphicalObject.setX(this.getPosition().x);
+        graphicalObject.setY(this.getPosition().y);
     }
 }
