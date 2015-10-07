@@ -27,8 +27,8 @@ public class Viewport {
 
 
     public static boolean isPointInViewport(Vec2 point) {
-        boolean x = ConversionUtility.toPixelPosX(point.x) < (POSITION.x + WIDTH/2) && ConversionUtility.toPixelPosX(point.x) > (POSITION.x - WIDTH/2);
-        boolean y = ConversionUtility.toPixelPosY(point.y) < (POSITION.y + HEIGHT/2) && ConversionUtility.toPixelPosY(point.y) > (POSITION.y - HEIGHT/2);
+        boolean x = ConversionUtility.toViewportX(point.x) < WIDTH && ConversionUtility.toViewportX(point.x) > 0;
+        boolean y = ConversionUtility.toViewportY(point.y) < HEIGHT && ConversionUtility.toViewportY(point.y) > 0;
         return x && y;
     }
 }

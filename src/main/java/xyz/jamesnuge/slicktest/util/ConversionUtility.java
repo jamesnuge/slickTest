@@ -57,12 +57,12 @@ public class ConversionUtility {
     }
 
     public static float toViewportX(float posX) {
-        float diff = posX - Viewport.POSITION.x; // 1
+        float diff = posX - Viewport.POSITION.x;
         return Viewport.WIDTH/2 + diff;
     }
 
     public static float toViewportY(float posY) {
-        float diff = posY - Viewport.POSITION.y; // -1
+        float diff = posY - Viewport.POSITION.y;
         return Viewport.HEIGHT/2 - diff;
     }
 
