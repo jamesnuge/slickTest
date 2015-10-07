@@ -22,11 +22,14 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
+import xyz.jamesnuge.slicktest.Viewport;
+import xyz.jamesnuge.slicktest.util.ConversionUtility;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class CircleObject extends Body implements Updatable {
+public class CircleObject extends Body implements Updatable, EngineObject {
     public Circle graphicalObject;
     public float radius;
 
@@ -42,7 +45,9 @@ public class CircleObject extends Body implements Updatable {
         super(bodyDef, world);
         this.createFixture(FixtureDefinitions.getCircleFixtureDefinition(radius));
         this.radius = radius;
-        graphicalObject = new Circle(pos.x, pos.y, radius);
+        if (Viewport.isPointInViewport(pos)) {
+            graphicalObject = new Circle(ConversionUtility.toViewportPos(pos).x, ConversionUtility.toViewportPos(pos).y, radius);
+        }
     }
 
     public Vec2 getCenterPoint() {
@@ -55,7 +60,30 @@ public class CircleObject extends Body implements Updatable {
 
     @Override
     public void update() {
-        graphicalObject.setX(this.getPosition().x);
-        graphicalObject.setY(this.getPosition().y);
+        graphicalObject.setX(ConversionUtility.toPixelPosX(this.getPosition().x));
+        graphicalObject.setY(ConversionUtility.toPixelPosY(this.getPosition().y));
+    }
+
+    @Override
+    public Vec2 getPhysicalCoordinates() {
+        return this.getPosition();
+    }
+
+    @Override
+    public Vec2 getGraphicalCoordinates() {
+        return new Vec2(graphicalObject.getCenterX(), graphicalObject.getCenterY());
+    }
+
+    @Override
+    public void draw(Graphics graphics) {
+        if (Viewport.isPointInViewport(getCenterPoint())) {
+            update();
+            graphics.draw(graphicalObject);
+        }
+    }
+
+    public void printCoordinates() {
+        System.out.println("slick x pos: " + this.getGraphicalCoordinates().x + " slick y pos: " + this.getGraphicalCoordinates().y + "\n" +
+                "jbox x pos: " + getCenterPoint().x + " jbox y pos: " + getCenterPoint().y);
     }
 }
