@@ -15,18 +15,10 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.controls;
+package xyz.jamesnuge.slicktest;
 
-import org.newdawn.slick.Input;
-import xyz.jamesnuge.slicktest.GameInfoWrapper;
-import xyz.jamesnuge.slicktest.KeyHandler;
-
-import java.util.function.BiConsumer;
-
-public class MoveLeftKeyHandler<T> extends KeyHandler<T> {
-    public static final int LEFT_KEY = Input.KEY_LEFT;
-
-    public MoveLeftKeyHandler(BiConsumer<GameInfoWrapper, T> handler, T object) {
-        super(LEFT_KEY, handler, object);
-    }
+public class SimulationProperties {
+    public static final Float TIME_STEP = 1.0f / 60.f;
+    public static final Integer VELOCITY_ITERATIONS = 6;
+    public static final Integer POSITION_ITERATIONS = 3;
 }

@@ -21,25 +21,24 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
 public class BodyDefinitions {
-    private BodyDef dynamicBodyDef = new BodyDef();
-    private BodyDef staticBodyDef = new BodyDef();
-    private BodyDef kinematicBodyDef = new BodyDef();
 
-    public BodyDefinitions() {
-        dynamicBodyDef.type = BodyType.DYNAMIC;
-        staticBodyDef.type = BodyType.STATIC;
-        kinematicBodyDef.type = BodyType.KINEMATIC;
+    public static BodyDef getDynamicBodyDef() {
+        return getBodyDef(BodyType.DYNAMIC);
     }
 
-    public BodyDef getDynamicBodyDef() {
-        return dynamicBodyDef;
+    public static BodyDef getStaticBodyDef() {
+        return getBodyDef(BodyType.STATIC);
     }
 
-    public BodyDef getStaticBodyDef() {
-        return staticBodyDef;
+    private static BodyDef getBodyDef(BodyType type) {
+        BodyDef bd = new BodyDef();
+        bd.type = type;
+        return bd;
     }
 
-    public BodyDef getKinematicBodyDef() {
-        return kinematicBodyDef;
+    public static BodyDef getKinematicBodyDef() {
+        return getBodyDef(BodyType.KINEMATIC);
     }
+
+
 }

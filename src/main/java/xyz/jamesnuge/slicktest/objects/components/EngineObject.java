@@ -19,9 +19,16 @@ package xyz.jamesnuge.slicktest.objects.components;
 
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.geom.Shape;
 
-public interface EngineObject {
-    Vec2 getPhysicalCoordinates();
-    Vec2 getGraphicalCoordinates();
-    void draw(Graphics graphics);
+public abstract class EngineObject implements Updatable {
+
+    abstract Shape getGraphicalObject();
+    abstract Vec2 getWorldCoordinates();
+    abstract Vec2 getViewportCoordinates();
+
+    public void draw(Graphics graphics){
+        update();
+        graphics.draw(getGraphicalObject());
+    }
 }

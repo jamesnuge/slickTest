@@ -22,36 +22,25 @@ import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Shape;
-import xyz.jamesnuge.slicktest.Viewport;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
-import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class CircleObject extends Body implements Updatable, EngineObject {
+public class CircleObject extends EngineObject {
     public Circle graphicalObject;
     public float radius;
-
+    public Body body;
 
     public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef, FixtureDef fixtureDef) {
-        super(bodyDef, world);
-        this.createFixture(fixtureDef);
+        bodyDef.position.set(pos);
+        this.body = world.createBody(bodyDef);
+        this.body.createFixture(fixtureDef);
         this.radius = radius;
-        graphicalObject = new Circle(pos.x, pos.y, radius);
-    }
-
-    public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef) {
-        super(bodyDef, world);
-        this.createFixture(FixtureDefinitions.getCircleFixtureDefinition(radius));
-        this.radius = radius;
-        if (Viewport.isPointInViewport(pos)) {
-            graphicalObject = new Circle(ConversionUtility.toViewportPos(pos).x, ConversionUtility.toViewportPos(pos).y, radius);
-        }
+        graphicalObject = new Circle(ConversionUtility.toViewportPos(pos).x, ConversionUtility.toViewportPos(pos).y, ConversionUtility.fromMetreToPixel(radius));
     }
 
     public Vec2 getCenterPoint() {
-        return new Vec2(this.getPosition().x - radius, this.getPosition().y - radius);
+        return new Vec2(this.body.getPosition().x, this.body.getPosition().y);
     }
 
     public Shape getDrawableObject() {
@@ -60,30 +49,23 @@ public class CircleObject extends Body implements Updatable, EngineObject {
 
     @Override
     public void update() {
-        graphicalObject.setX(ConversionUtility.toPixelPosX(this.getPosition().x));
-        graphicalObject.setY(ConversionUtility.toPixelPosY(this.getPosition().y));
+        graphicalObject.setX(ConversionUtility.toViewportX(this.body.getPosition().x - radius));
+        graphicalObject.setY(ConversionUtility.toViewportY(this.body.getPosition().y + radius));
     }
 
     @Override
-    public Vec2 getPhysicalCoordinates() {
-        return this.getPosition();
+    Shape getGraphicalObject() {
+        return this.graphicalObject;
     }
 
     @Override
-    public Vec2 getGraphicalCoordinates() {
+    public Vec2 getWorldCoordinates() {
+        return this.body.getPosition();
+    }
+
+    @Override
+    public Vec2 getViewportCoordinates() {
         return new Vec2(graphicalObject.getCenterX(), graphicalObject.getCenterY());
     }
 
-    @Override
-    public void draw(Graphics graphics) {
-        if (Viewport.isPointInViewport(getCenterPoint())) {
-            update();
-            graphics.draw(graphicalObject);
-        }
-    }
-
-    public void printCoordinates() {
-        System.out.println("slick x pos: " + this.getGraphicalCoordinates().x + " slick y pos: " + this.getGraphicalCoordinates().y + "\n" +
-                "jbox x pos: " + getCenterPoint().x + " jbox y pos: " + getCenterPoint().y);
-    }
 }

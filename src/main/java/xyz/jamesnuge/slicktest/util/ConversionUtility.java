@@ -22,57 +22,55 @@ import xyz.jamesnuge.slicktest.Viewport;
 
 public class ConversionUtility {
 
-    //Convert a JBox2D x coordinate to a Slick2d pixel x coordinate
-    public static float toPixelPosX(float posX) {
-        float x = Viewport.WIDTH*posX / 100.0f;
-        return x;
-    }
+    public static final Float PIXEL_TO_METRE_RATIO = 0.01f;
 
     //Convert a Slick2d pixel x coordinate to a JBox2D x coordinate
     public static float toPosX(float posX) {
-        float x =   (posX*100.0f*1.0f)/Viewport.WIDTH;
+        float x = (posX * 100.0f * 1.0f) / Viewport.WIDTH;
         return x;
-    }
-
-    //Convert a JBox2D y coordinate to a Slick2d pixel y coordinate
-    public static float toPixelPosY(float posY) {
-        float y = Viewport.HEIGHT/2 - (1.0f*Viewport.HEIGHT) * posY / 100.0f;
-        return y;
     }
 
     //Convert a Slick2d pixel y coordinate to a JBox2D y coordinate
     public static float toPosY(float posY) {
-        float y = 100.0f - ((posY * 100*1.0f) /Viewport.HEIGHT) ;
+        float y = 100.0f - ((posY * 100 * 1.0f) / Viewport.HEIGHT);
         return y;
     }
 
     //Convert a JBox2D width to pixel width
     public static float toPixelWidth(float width) {
-        return Viewport.WIDTH*width / 100.0f;
+        return width / PIXEL_TO_METRE_RATIO;
+    }
+
+    public static float fromMetreToPixel(float measurement) {
+        return measurement / PIXEL_TO_METRE_RATIO;
     }
 
     //Convert a JBox2D height to pixel height
     public static float toPixelHeight(float height) {
-        return Viewport.HEIGHT*height/100.0f;
+       return height / PIXEL_TO_METRE_RATIO;
+    }
+
+    public static float toWorldHeight(float height) {
+        return height * PIXEL_TO_METRE_RATIO;
+    }
+
+    public static float toWorldWidth(float width) {
+        return width * PIXEL_TO_METRE_RATIO;
     }
 
     public static float toViewportX(float posX) {
-        float diff = posX - Viewport.POSITION.x;
-        return Viewport.WIDTH/2 + diff;
+        float diff = fromMetreToPixel(posX) - Viewport.POSITION.x;
+        return Viewport.WIDTH / 2 + diff;
     }
 
     public static float toViewportY(float posY) {
-        float diff = posY - Viewport.POSITION.y;
-        return Viewport.HEIGHT/2 - diff;
+        float diff = fromMetreToPixel(posY) - Viewport.POSITION.y;
+        return Viewport.HEIGHT / 2 - diff;
     }
 
     public static Vec2 toViewportPos(Vec2 point) {
-        if (Viewport.isPointInViewport(point)) {
-            float x = point.x - Viewport.POSITION.x + (Viewport.WIDTH/2);
-            float y = point.y - Viewport.POSITION.y + (Viewport.HEIGHT/2);
-            return new Vec2(x, y);
-        } else {
-            return null;
-        }
+        float x = fromMetreToPixel(Viewport.POSITION.x + point.x) + (Viewport.WIDTH / 2);
+        float y = fromMetreToPixel(Viewport.POSITION.y - point.y) + (Viewport.HEIGHT / 2);
+        return new Vec2(x, y);
     }
 }

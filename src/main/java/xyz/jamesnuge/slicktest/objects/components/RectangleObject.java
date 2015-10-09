@@ -23,20 +23,55 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import xyz.jamesnuge.slicktest.util.ConversionUtility;
+import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class RectangleObject extends Body {
+public class RectangleObject extends EngineObject {
 
     private Rectangle graphicalObject;
     public BodyDef bodyDef;
+    public Body body;
+    private Vec2 size;
 
     public RectangleObject(Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
-        super(bodyDef, world);
-        this.bodyDef = bodyDef;
-        graphicalObject = new Rectangle(pos.x, pos.y, size.x, size.y);
+        bodyDef.position.set(pos);
+
+        this.body = world.createBody(bodyDef);
+        this.size = size;
+
+        body.createFixture(FixtureDefinitions.getRectangleFixtureDefinition(size));
+        graphicalObject = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
     }
 
     public Shape getDrawableObject() {
         return graphicalObject;
     }
 
+    @Override
+    Shape getGraphicalObject() {
+        return this.graphicalObject;
+    }
+
+    @Override
+    public Vec2 getWorldCoordinates() {
+        return body.getPosition();
+    }
+
+    @Override
+    public Vec2 getViewportCoordinates() {
+        return new Vec2(graphicalObject.getX(), graphicalObject.getY());
+    }
+
+    @Override
+    public void update() {
+
+    }
+
+    public Vec2 getCenterPos() {
+        return new Vec2(body.getPosition().x-this.size.x/2, body.getPosition().y + this.size.y);
+    }
+
+    public Vec2 getViewpointCenterPos() {
+        return new Vec2();
+    }
 }

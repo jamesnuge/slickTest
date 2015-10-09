@@ -18,19 +18,38 @@
 package xyz.jamesnuge.slicktest.util;
 
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.Shape;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.FixtureDef;
 
 public class FixtureDefinitions {
 
 
+    public static FixtureDef getRectangleFixtureDefinition(Vec2 size) {
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(size.x, size.y);
+        FixtureDef fd = new FixtureDef();
+        fd.shape = shape;
+        fd.density = 1;
+        fd.friction = 0.3f;
+        return fd;
+    }
+
     public static FixtureDef getCircleFixtureDefinition(float radius) {
         CircleShape circleShape = new CircleShape();
         circleShape.m_radius = radius;
-        FixtureDef defToReturn = new FixtureDef();
-        defToReturn.shape = circleShape;
-        defToReturn.density = 0.6f;
-        defToReturn.friction = 0.3f;
-        defToReturn.restitution = 0.8f;
-        return defToReturn;
+        return createFixtureDef(circleShape, 0.6f, 0.3f, 0.8f);
     }
+
+    public static FixtureDef createFixtureDef(Shape shape, float density, float friction, float restitution){
+        FixtureDef fd = new FixtureDef();
+        fd.shape = shape;
+        fd.density = density;
+        fd.friction = friction;
+        fd.restitution = restitution;
+        return fd;
+    }
+
+
 }
