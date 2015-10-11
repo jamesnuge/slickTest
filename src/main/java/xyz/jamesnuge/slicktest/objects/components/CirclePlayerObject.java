@@ -22,6 +22,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.KeyHandler;
+import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,8 @@ import java.util.stream.Collectors;
 
 public class CirclePlayerObject extends CircleObject implements Controllable<CirclePlayerObject> {
     Map<Integer, KeyHandler<CirclePlayerObject>> keyHandlers = new HashMap<>();
+    Map<Integer, ReleaseKeyHandler<CirclePlayerObject>> releaseKeyHandlers = new HashMap<>();
+
 
     public CirclePlayerObject(int jump, int left, int right, Vec2 pos, float radius, World world, BodyDef bodyDef) {
         super(pos, radius, world, bodyDef);
@@ -44,7 +47,15 @@ public class CirclePlayerObject extends CircleObject implements Controllable<Cir
 
     //TODO: Add release keyhandler for buttons
     private void addMoveLeftHandler(int KEY){
-        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.1f, 0f)), this));
+        addMoveLeftReleaseHandler(KEY);
+        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
+    }
+
+    private void addMoveLeftReleaseHandler(int key) {
+        releaseKeyHandlers.put(key, new ReleaseKeyHandler<>(key, object -> {
+            System.out.println("Hit release handlers");
+            object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y));
+        }, this));
     }
 
     private KeyHandler<CirclePlayerObject> getMoveRightHandler(int KEY){
@@ -58,6 +69,7 @@ public class CirclePlayerObject extends CircleObject implements Controllable<Cir
 
     public void applyKeyHandlers(GameInfoWrapper info) {
         keyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
+        releaseKeyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
     }
 
 }
