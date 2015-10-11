@@ -28,7 +28,6 @@ public abstract class EngineObject implements Updatable {
     abstract Vec2 getViewportCoordinates();
 
     public void draw(Graphics graphics){
-        update();
         graphics.draw(getGraphicalObject());
     }
 }

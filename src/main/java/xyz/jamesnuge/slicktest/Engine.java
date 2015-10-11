@@ -5,9 +5,10 @@ import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
+import xyz.jamesnuge.slicktest.objects.components.CirclePlayerObject;
+import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
-import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Engine extends BasicGame {
 
     public List<KeyHandler<CircleObject>> circleKeyHandlers = new ArrayList<>();
     public List<ReleaseKeyHandler<World>> worldKeyHandlers = new ArrayList<>();
-    public CircleObject circle;
+    public List<CirclePlayerObject> circles = new ArrayList<>();
     public RectangleObject groundObject;
 
     public World world = new World(new Vec2(0.0f, -10.0f));
@@ -49,51 +50,35 @@ public class Engine extends BasicGame {
     public void init(GameContainer gameContainer) throws SlickException {
         world.setAllowSleep(true);
 
-        circle = new CircleObject(new Vec2(0, 2), 0.1f, world, BodyDefinitions.getDynamicBodyDef(), FixtureDefinitions.getCircleFixtureDefinition(10));
-        //TODO: Why does this only work with the y pos as -10f and nothing higher?
-        groundObject = new RectangleObject(new Vec2(0f,-10f), new Vec2(8f, 0.2f), world, BodyDefinitions.getStaticBodyDef());
-        addKeyHandlers();
+        circles.add(new CirclePlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), 0.1f, world, BodyDefinitions.getDynamicBodyDef()));
+        groundObject = new RectangleObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world, BodyDefinitions.getStaticBodyDef());
+        System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
+    }
+
+    public static boolean isPointInRectangle(Vec2 point, RectangleObject rect){
+        boolean x = point.x > rect.body.getPosition().x - rect.getSize().x && point.x < rect.body.getPosition().x + rect.getSize().x;
+        boolean y = point.y > rect.body.getPosition().y - rect.getSize().y && point.y < rect.body.getPosition().y + rect.getSize().y;
+        return x && y;
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
 
-        updateWorld();
         gameInfo.update(gameContainer, i);
+        updateWorld();
         circleKeyHandlers.stream().forEach(circleKeyHandlers -> circleKeyHandlers.consume(gameInfo));
         worldKeyHandlers.stream().forEach(worldKeyHandler -> worldKeyHandler.consume(gameInfo));
     }
 
     private void updateWorld() {
         world.step(SimulationProperties.TIME_STEP, SimulationProperties.VELOCITY_ITERATIONS, SimulationProperties.POSITION_ITERATIONS);
+        circles.stream().forEach(circle -> circle.applyKeyHandlers(gameInfo));
+        circles.stream().forEach(EngineObject::update);
     }
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        //Print circle coordinates
-        graphics.drawString("viewport posX: " + circle.getViewportCoordinates().x, 200,200);
-        graphics.drawString("viewport posY: " + circle.getViewportCoordinates().y, 200,220);
-        graphics.drawString("world posX: " + circle.body.getPosition().x, 200, 240);
-        graphics.drawString("world posY: " + circle.body.getPosition().y, 200, 260);
-
-        //Print ground coordinates
-        graphics.drawString("viewport posX: " + groundObject.getViewportCoordinates().x, 200,500);
-        graphics.drawString("viewport posY: " + groundObject.getViewportCoordinates().y, 200,520);
-        graphics.drawString("world posX: " + groundObject.body.getPosition().x, 200, 540);
-        graphics.drawString("world posY: " + groundObject.body.getPosition().y, 200, 560);
-
-        circle.draw(graphics);
+        circles.stream().forEach(circleObject -> circleObject.draw(graphics));
         groundObject.draw(graphics);
         Viewport.drawViewportInfo(graphics);
     }
-
-    private void addKeyHandlers() {
-        worldKeyHandlers.add(new ReleaseKeyHandler<>(Input.KEY_SPACE, (updateInfo, world) -> world.step(SimulationProperties.TIME_STEP, SimulationProperties.VELOCITY_ITERATIONS, SimulationProperties.POSITION_ITERATIONS), world));
-        circleKeyHandlers.add(new ReleaseKeyHandler<>(Input.KEY_DOWN, (updateInfo, circle) -> {
-            System.out.println("hit handler");
-            //circle.body.applyForceToCenter(new Vec2(0f, -9.8f));
-            circle.update();
-        }, circle));
-
-    }
-
 }

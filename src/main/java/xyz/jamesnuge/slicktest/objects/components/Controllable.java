@@ -17,9 +17,10 @@
 
 package xyz.jamesnuge.slicktest.objects.components;
 
-import xyz.jamesnuge.slicktest.GameInfoWrapper;
+import xyz.jamesnuge.slicktest.KeyHandler;
+
+import java.util.List;
 
 public interface Controllable<T> {
-    void moveLeft(GameInfoWrapper wrapper, T obj);
-    void moveRight(GameInfoWrapper wrapper, T obj);
+    public List<KeyHandler<T>> getKeyHandlers();
 }

@@ -20,20 +20,20 @@ package xyz.jamesnuge.slicktest.controls;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.KeyHandler;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class ReleaseKeyHandler<T> extends KeyHandler<T> {
 
     boolean keyDown = false;
 
-    public ReleaseKeyHandler(int KEY, BiConsumer<GameInfoWrapper, T> handler, T object) {
+    public ReleaseKeyHandler(int KEY, Consumer<T> handler, T object) {
         super(KEY, handler, object);
     }
 
     @Override
     public void consume(GameInfoWrapper info) {
         if(isKeyReleased(info))
-            this.handler.accept(info, this.object);
+            this.handler.accept(this.object);
     }
 
     private boolean isKeyReleased(GameInfoWrapper info) {

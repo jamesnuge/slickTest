@@ -31,6 +31,11 @@ public class RectangleObject extends EngineObject {
     private Rectangle graphicalObject;
     public BodyDef bodyDef;
     public Body body;
+
+    public Vec2 getSize() {
+        return new Vec2(size);
+    }
+
     private Vec2 size;
 
     public RectangleObject(Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
