@@ -69,7 +69,8 @@ public class RectangleObject extends EngineObject {
 
     @Override
     public void update() {
-
+        graphicalObject.setY(ConversionUtility.toViewportY(this.body.getPosition().y));
+        graphicalObject.setX(ConversionUtility.toViewportX(this.body.getPosition().x));
     }
 
     public Vec2 getCenterPos() {

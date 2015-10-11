@@ -20,7 +20,6 @@ package xyz.jamesnuge.slicktest.objects.components;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
-import org.newdawn.slick.Graphics;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
@@ -28,25 +27,23 @@ import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public class CirclePlayerObject extends CircleObject implements Controllable<CirclePlayerObject> {
-    Map<Integer, KeyHandler<CirclePlayerObject>> keyHandlers = new HashMap<>();
-    Map<Integer, ReleaseKeyHandler<CirclePlayerObject>> releaseKeyHandlers = new HashMap<>();
+public class PlayerRectangleObject extends RectangleObject implements Controllable<PlayerRectangleObject> {
 
+    Map<Integer, KeyHandler<PlayerRectangleObject>> keyHandlers = new HashMap<>();
+    Map<Integer, ReleaseKeyHandler<PlayerRectangleObject>> releaseKeyHandlers = new HashMap<>();
 
-    public CirclePlayerObject(int jump, int left, int right, Vec2 pos, float radius, World world, BodyDef bodyDef) {
-        super(pos, radius, world, bodyDef);
-        addMoveLeftHandler(left);
+    public PlayerRectangleObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
+        super(pos, size, world, bodyDef);
         addMoveRightHandler(right);
+        addMoveLeftHandler(left);
     }
 
     @Override
-    public List<KeyHandler<CirclePlayerObject>> getKeyHandlers() {
-        return keyHandlers.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList());
+    public List<KeyHandler<PlayerRectangleObject>> getKeyHandlers() {
+        return null;
     }
 
-    //TODO: Add release keyhandler for buttons
     private void addMoveLeftHandler(int KEY){
         addMoveLeftReleaseHandler(KEY);
         keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
@@ -58,26 +55,15 @@ public class CirclePlayerObject extends CircleObject implements Controllable<Cir
 
     private void addMoveRightHandler(int KEY){
         addMoveRightReleaseHandler(KEY);
-        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.applyLinearImpulse(new Vec2(0.01f, 0f), object.body.getPosition()), this));
+        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(0.5f, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveRightReleaseHandler(int key) {
         releaseKeyHandlers.put(key, new ReleaseKeyHandler<>(key, object -> object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y)), this));
     }
 
-    @Override
-    public void update() {
-        super.update();
-    }
-
     public void applyKeyHandlers(GameInfoWrapper info) {
         keyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
         releaseKeyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
-    }
-
-
-    public void drawLinearVelocity(Graphics g) {
-        g.drawString("Linear Velocity x: " + this.body.getLinearVelocity().x, 200, 200);
-        g.drawString("Linear Velocity y: " + this.body.getLinearVelocity().y, 200, 220);
     }
 }

@@ -4,10 +4,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
-import xyz.jamesnuge.slicktest.objects.components.CircleObject;
-import xyz.jamesnuge.slicktest.objects.components.CirclePlayerObject;
-import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
+import xyz.jamesnuge.slicktest.objects.components.*;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 
 import java.util.ArrayList;
@@ -22,8 +19,9 @@ public class Engine extends BasicGame {
 
     public List<KeyHandler<CircleObject>> circleKeyHandlers = new ArrayList<>();
     public List<ReleaseKeyHandler<World>> worldKeyHandlers = new ArrayList<>();
-    public List<CirclePlayerObject> circles = new ArrayList<>();
+    public List<PlayerRectangleObject> circles = new ArrayList<>();
     public RectangleObject groundObject;
+    public PlayerRectangleObject player;
 
     public World world = new World(new Vec2(0.0f, -10.0f));
     {
@@ -50,7 +48,8 @@ public class Engine extends BasicGame {
     public void init(GameContainer gameContainer) throws SlickException {
         world.setAllowSleep(true);
 
-        circles.add(new CirclePlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), 0.1f, world, BodyDefinitions.getDynamicBodyDef()));
+        player = new PlayerRectangleObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), new Vec2(0.1f, 0.2f), world, BodyDefinitions.getDynamicBodyDef());
+        circles.add(player);
         groundObject = new RectangleObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world, BodyDefinitions.getStaticBodyDef());
         System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
     }
@@ -79,6 +78,9 @@ public class Engine extends BasicGame {
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         circles.stream().forEach(circleObject -> circleObject.draw(graphics));
         groundObject.draw(graphics);
+        DebugUtilities.drawLinearVelocity(graphics, player.body);
         Viewport.drawViewportInfo(graphics);
     }
+
+
 }
