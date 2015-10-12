@@ -37,11 +37,24 @@ public class PlayerRectangleObject extends RectangleObject implements Controllab
         super(pos, size, world, bodyDef);
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
+        addJumpHandler(jump);
     }
 
     @Override
     public List<KeyHandler<PlayerRectangleObject>> getKeyHandlers() {
         return null;
+    }
+
+    private void addJumpHandler(int KEY) {
+        keyHandlers.put(KEY, new KeyHandler<>(KEY, object -> {
+            if(object.canJump()) {
+                object.body.applyForceToCenter(new Vec2(0f, 5f));
+            }
+        }, this));
+    }
+
+    private boolean canJump() {
+        return this.body.getLinearVelocity().y == 0f;
     }
 
     private void addMoveLeftHandler(int KEY){
