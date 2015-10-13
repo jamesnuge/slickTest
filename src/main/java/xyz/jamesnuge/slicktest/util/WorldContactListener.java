@@ -15,15 +15,31 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components;
+package xyz.jamesnuge.slicktest.util;
 
-import org.jbox2d.dynamics.Body;
-import org.newdawn.slick.Graphics;
+import org.jbox2d.callbacks.ContactImpulse;
+import org.jbox2d.callbacks.ContactListener;
+import org.jbox2d.collision.Manifold;
+import org.jbox2d.dynamics.contacts.Contact;
 
-public class DebugUtilities {
+public class WorldContactListener implements ContactListener {
+    @Override
+    public void beginContact(Contact contact) {
 
-    public static void drawLinearVelocity(Graphics g, Body b){
-        g.drawString("Linear Velocity x: " + b.getLinearVelocity().x, 200, 200);
-        g.drawString("Linear Velocity y: " + b.getLinearVelocity().y, 200, 220);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }

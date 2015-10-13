@@ -5,7 +5,7 @@ import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
-import xyz.jamesnuge.slicktest.objects.components.DebugUtilities;
+import xyz.jamesnuge.slicktest.util.DebugUtilities;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.objects.components.basicobjects.BasicGroundObject;
