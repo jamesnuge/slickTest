@@ -15,33 +15,41 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components;
+package xyz.jamesnuge.slicktest.objects.components.basicobjects;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
+import xyz.jamesnuge.slicktest.objects.components.Controllable;
+import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
+import xyz.jamesnuge.slicktest.objects.components.userData.PlayerUserData;
+import xyz.jamesnuge.slicktest.util.BodyDefinitions;
+import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerRectangleObject extends RectangleObject implements Controllable<PlayerRectangleObject> {
+public class BasicPlayerObject extends RectangleObject<PlayerUserData> implements Controllable<BasicPlayerObject> {
 
-    Map<Integer, KeyHandler<PlayerRectangleObject>> keyHandlers = new HashMap<>();
-    Map<Integer, ReleaseKeyHandler<PlayerRectangleObject>> releaseKeyHandlers = new HashMap<>();
+    Map<Integer, KeyHandler<BasicPlayerObject>> keyHandlers = new HashMap<>();
+    Map<Integer, ReleaseKeyHandler<BasicPlayerObject>> releaseKeyHandlers = new HashMap<>();
 
-    public PlayerRectangleObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
-        super(pos, size, world, bodyDef);
+    private PlayerUserData userData = new PlayerUserData();
+
+    public BasicPlayerObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world) {
+        super(pos, size, world, BodyDefinitions.getDynamicBodyDef());
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
         addJumpHandler(jump);
     }
 
     @Override
-    public List<KeyHandler<PlayerRectangleObject>> getKeyHandlers() {
+    public List<KeyHandler<BasicPlayerObject>> getKeyHandlers() {
         return null;
     }
 
@@ -79,4 +87,24 @@ public class PlayerRectangleObject extends RectangleObject implements Controllab
         keyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
         releaseKeyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
     }
+
+    @Override
+    public FixtureDef getFixtureDef() {
+        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+    }
+
+    @Override
+    protected BodyDef getBodyDef() {
+        return BodyDefinitions.getDynamicBodyDef();
+    }
+
+    public void setUserData(PlayerUserData userData) {
+        this.userData = userData;
+    }
+
+    @Override
+    public PlayerUserData getUserData() {
+        return userData;
+    }
+
 }

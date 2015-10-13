@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CirclePlayerObject extends CircleObject implements Controllable<CirclePlayerObject> {
+public abstract class CirclePlayerObject extends CircleObject implements Controllable<CirclePlayerObject> {
     Map<Integer, KeyHandler<CirclePlayerObject>> keyHandlers = new HashMap<>();
     Map<Integer, ReleaseKeyHandler<CirclePlayerObject>> releaseKeyHandlers = new HashMap<>();
 

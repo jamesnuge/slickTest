@@ -18,19 +18,18 @@
 package xyz.jamesnuge.slicktest.objects.components;
 
 import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
-import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class RectangleObject extends EngineObject {
+public abstract class RectangleObject<T extends EngineObjectUserData> extends EngineObject<T> {
+
+    private Class userDataClass;
 
     private Rectangle graphicalObject;
     public BodyDef bodyDef;
-    public Body body;
 
     public Vec2 getSize() {
         return new Vec2(size);
@@ -39,12 +38,11 @@ public class RectangleObject extends EngineObject {
     private Vec2 size;
 
     public RectangleObject(Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
-        bodyDef.position.set(pos);
-
+        this.bodyDef = bodyDef;
+        this.bodyDef.position.set(pos);
         this.body = world.createBody(bodyDef);
         this.size = size;
-
-        body.createFixture(FixtureDefinitions.getRectangleFixtureDefinition(size));
+        body.createFixture(this.getFixtureDef());
         graphicalObject = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
     }
 
@@ -79,5 +77,9 @@ public class RectangleObject extends EngineObject {
 
     public Vec2 getViewpointCenterPos() {
         return new Vec2();
+    }
+
+    public void setUserDataClass(Class userDataClass) {
+
     }
 }

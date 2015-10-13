@@ -18,16 +18,31 @@
 package xyz.jamesnuge.slicktest.objects.components;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
+import xyz.jamesnuge.slicktest.util.UserDataHelper;
 
-public abstract class EngineObject implements Updatable {
+public abstract class EngineObject<T extends EngineObjectUserData> implements Updatable {
+
+    public Body body;
 
     abstract Shape getGraphicalObject();
     abstract Vec2 getWorldCoordinates();
     abstract Vec2 getViewportCoordinates();
 
+    public abstract FixtureDef getFixtureDef();
+    protected abstract BodyDef getBodyDef();
+
+
     public void draw(Graphics graphics){
         graphics.draw(getGraphicalObject());
+    }
+    public abstract T getUserData();
+
+    public void setUsetData(T userData){
+        UserDataHelper.addUserData(body, userData);
     }
 }
