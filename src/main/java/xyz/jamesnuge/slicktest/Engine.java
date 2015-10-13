@@ -36,18 +36,6 @@ public class Engine extends BasicGame {
         super(TITLE);
     }
 
-    public static void main(String[] args) {
-
-        try {
-            AppGameContainer appGameContainer = new AppGameContainer(new Engine());
-            appGameContainer.setDisplayMode(Viewport.WIDTH, Viewport.HEIGHT, false);
-            appGameContainer.setTargetFrameRate(FPS);
-            appGameContainer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
         world.setAllowSleep(true);
