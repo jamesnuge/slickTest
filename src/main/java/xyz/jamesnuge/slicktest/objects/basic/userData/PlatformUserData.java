@@ -15,20 +15,9 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.util;
+package xyz.jamesnuge.slicktest.objects.basic.userData;
 
-import org.jbox2d.dynamics.Body;
-import org.newdawn.slick.Graphics;
+import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class DebugUtilities {
-
-    public static void drawLinearVelocity(Graphics g, Body b){
-        g.drawString("Linear Velocity x: " + b.getLinearVelocity().x, 200, 200);
-        g.drawString("Linear Velocity y: " + b.getLinearVelocity().y, 200, 220);
-    }
-
-    public static void drawPos(Graphics g, Body b) {
-        g.drawString("x: " + b.getPosition().x, 200, 200);
-        g.drawString("y: " + b.getPosition().y, 200, 220);
-    }
+public class PlatformUserData extends EngineObjectUserData {
 }

@@ -4,7 +4,6 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.newdawn.slick.Graphics;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.LatchedPressKeyHandler;
@@ -136,15 +135,6 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
 
     public boolean isMovingX() {
         return this.body.getLinearVelocity().x > FORCE_EPSILON || this.body.getLinearVelocity().x < -FORCE_EPSILON;
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        super.draw(g);
-        g.drawString("Is Moving? " + isMovingY(), 400, 400);
-        g.drawString("Is Jumping? " + isJumping, 400, 420);
-        g.drawString("No of jumps" + numOfJumps, 400, 440);
-        g.drawString("Jump latch" + jumpLatch, 400, 460);
     }
 
     private Consumer<BasicPlayerObject> jump = object -> {
