@@ -3,13 +3,14 @@ package xyz.jamesnuge.slicktest;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
+import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
 import xyz.jamesnuge.slicktest.util.DebugUtilities;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
-import xyz.jamesnuge.slicktest.objects.components.basicobjects.BasicGroundObject;
-import xyz.jamesnuge.slicktest.objects.components.basicobjects.BasicPlayerObject;
+import xyz.jamesnuge.slicktest.objects.basic.BasicGroundObject;
+import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
 
 import java.util.ArrayList;
 import java.util.List;

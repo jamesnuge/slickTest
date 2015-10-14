@@ -1,43 +1,37 @@
-/*
- * Copyright (c) 2015 Clearbox Systems Pty. Ltd.
- * http://www.clearboxsystems.com.au
- *
- * Disclaimer - Please Read:
- * Clearbox Systems cannot accept responsibility or liability for
- * any loss, damage, cost or expense users might incur as a result
- * of the use of, or reliance upon, any example code or software or
- * program produced by Clearbox Systems Pty. Ltd.
- *
- * This software and the intellectual property therein belongs to
- * Clearbox Systems Pty. Ltd. and shall not be used without prior
- * license agreement by any third party for commercial purposes.
- * Clearbox Systems may allow third party use of this software for
- * research or research related activities upon written approval.
- */
-
-package xyz.jamesnuge.slicktest.objects.components.basicobjects;
+package xyz.jamesnuge.slicktest.objects.basic;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.newdawn.slick.Graphics;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
-import xyz.jamesnuge.slicktest.KeyHandler;
+import xyz.jamesnuge.slicktest.controls.KeyHandler;
+import xyz.jamesnuge.slicktest.controls.LatchedPressKeyHandler;
+import xyz.jamesnuge.slicktest.controls.PressKeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
+import xyz.jamesnuge.slicktest.objects.basic.userData.PlayerUserData;
 import xyz.jamesnuge.slicktest.objects.components.Controllable;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
-import xyz.jamesnuge.slicktest.objects.components.userData.PlayerUserData;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class BasicPlayerObject extends RectangleObject<PlayerUserData> implements Controllable<BasicPlayerObject> {
 
+    public static final float FORCE_EPSILON = 0.3f;
+    public static final int TOTAL_NUM_OF_JUMPS = 2;
     Map<Integer, KeyHandler<BasicPlayerObject>> keyHandlers = new HashMap<>();
     Map<Integer, ReleaseKeyHandler<BasicPlayerObject>> releaseKeyHandlers = new HashMap<>();
+    LatchedPressKeyHandler<BasicPlayerObject> latchedPressKeyHandler;
+    public boolean isJumping = false;
+    private boolean jumpLatch = false;
+
+    int numOfJumps = TOTAL_NUM_OF_JUMPS;
 
     private PlayerUserData userData = new PlayerUserData();
 
@@ -54,20 +48,23 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     }
 
     private void addJumpHandler(int KEY) {
-        keyHandlers.put(KEY, new KeyHandler<>(KEY, object -> {
-            if(object.canJump()) {
-                object.body.applyForceToCenter(new Vec2(0f, 5f));
-            }
-        }, this));
+        latchedPressKeyHandler = new LatchedPressKeyHandler<>(KEY, jump, this);
     }
 
     private boolean canJump() {
-        return this.body.getLinearVelocity().y == 0f;
+        if (numOfJumps <= 0) {
+            return false;
+        } else {
+            if (isJumping) {
+                return true;
+            }
+            return !isMovingY();
+        }
     }
 
     private void addMoveLeftHandler(int KEY){
         addMoveLeftReleaseHandler(KEY);
-        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
+        keyHandlers.put(KEY, new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveLeftReleaseHandler(int key) {
@@ -76,7 +73,7 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
 
     private void addMoveRightHandler(int KEY){
         addMoveRightReleaseHandler(KEY);
-        keyHandlers.put(KEY, new KeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(0.5f, object.body.getLinearVelocity().y)), this));
+        keyHandlers.put(KEY, new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(0.5f, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveRightReleaseHandler(int key) {
@@ -86,7 +83,25 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     public void applyKeyHandlers(GameInfoWrapper info) {
         keyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
         releaseKeyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
+        latchedPressKeyHandler.consume(info);
     }
+
+    @Override
+    public void update() {
+        super.update();
+        if (!isMovingY()) {
+            if(!isJumping) {
+                numOfJumps = TOTAL_NUM_OF_JUMPS;
+            }
+            if(!jumpLatch) {
+                isJumping = false;
+            }
+        }
+        if (isMovingDown()) {
+            jumpLatch = false;
+        }
+    }
+
 
     @Override
     public FixtureDef getFixtureDef() {
@@ -107,4 +122,38 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
         return userData;
     }
 
+    public boolean isMovingY() {
+        return this.body.getLinearVelocity().y > FORCE_EPSILON || this.body.getLinearVelocity().y < -FORCE_EPSILON;
+    }
+
+    public boolean isMovingUp() {
+        return this.body.getLinearVelocity().y > FORCE_EPSILON;
+    }
+
+    public boolean isMovingDown() {
+        return this.body.getLinearVelocity().y < -FORCE_EPSILON;
+    }
+
+    public boolean isMovingX() {
+        return this.body.getLinearVelocity().x > FORCE_EPSILON || this.body.getLinearVelocity().x < -FORCE_EPSILON;
+    }
+
+    @Override
+    public void draw(Graphics g) {
+        super.draw(g);
+        g.drawString("Is Moving? " + isMovingY(), 400, 400);
+        g.drawString("Is Jumping? " + isJumping, 400, 420);
+        g.drawString("No of jumps" + numOfJumps, 400, 440);
+        g.drawString("Jump latch" + jumpLatch, 400, 460);
+    }
+
+    private Consumer<BasicPlayerObject> jump = object -> {
+
+        if (object.canJump()) {
+            object.isJumping = true;
+            jumpLatch = true;
+            numOfJumps--;
+            object.body.applyForceToCenter(new Vec2(0f, 15f));
+        }
+    };
 }

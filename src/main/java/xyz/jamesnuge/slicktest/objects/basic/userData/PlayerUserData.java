@@ -15,9 +15,10 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components.userData;
+package xyz.jamesnuge.slicktest.objects.basic.userData;
 
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class GroundUserData extends EngineObjectUserData {
+public class PlayerUserData extends EngineObjectUserData {
+
 }

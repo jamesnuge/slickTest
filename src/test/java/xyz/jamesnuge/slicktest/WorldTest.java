@@ -1,4 +1,4 @@
-/*
+package xyz.jamesnuge.slicktest;/*
  * Copyright (c) 2015 Clearbox Systems Pty. Ltd.
  * http://www.clearboxsystems.com.au
  *

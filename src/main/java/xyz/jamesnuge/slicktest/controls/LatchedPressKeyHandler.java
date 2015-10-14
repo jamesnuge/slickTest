@@ -15,12 +15,29 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components;
+package xyz.jamesnuge.slicktest.controls;
 
-import xyz.jamesnuge.slicktest.controls.KeyHandler;
+import org.newdawn.slick.Input;
+import xyz.jamesnuge.slicktest.GameInfoWrapper;
 
-import java.util.List;
+import java.util.function.Consumer;
 
-public interface Controllable<T> {
-    public List<KeyHandler<T>> getKeyHandlers();
+public class LatchedPressKeyHandler<T> extends PressKeyHandler<T> {
+    private boolean latched = false;
+
+    public LatchedPressKeyHandler(int KEY, Consumer<T> handler, T object) {
+        super(KEY, handler, object);
+    }
+
+    @Override
+    public boolean isKeyPressed(GameInfoWrapper info) {
+        Input input = info.gameContainer.getInput();
+        if (!latched) {
+            latched = input.isKeyDown(KEY);
+            return latched;
+        } else {
+            latched = input.isKeyDown(KEY);
+            return false;
+        }
+    }
 }

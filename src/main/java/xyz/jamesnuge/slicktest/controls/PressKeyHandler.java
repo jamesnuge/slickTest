@@ -17,39 +17,34 @@
 
 package xyz.jamesnuge.slicktest.controls;
 
+import org.newdawn.slick.Input;
 import xyz.jamesnuge.slicktest.GameInfoWrapper;
 
 import java.util.function.Consumer;
 
-public class ReleaseKeyHandler<T> extends PressKeyHandler<T> {
+public class PressKeyHandler<T> implements KeyHandler<T>{
+    public final int KEY;
+    public Consumer<T> handler;
+    public T object;
 
-    boolean keyDown = false;
-
-    public ReleaseKeyHandler(int KEY, Consumer<T> handler, T object) {
-        super(KEY, handler, object);
+    public PressKeyHandler(int KEY, Consumer<T> handler, T object) {
+        this.KEY = KEY;
+        this.handler = handler;
+        this.object = object;
     }
 
-    @Override
+    public void consumeOther(GameInfoWrapper info, T object) {
+        if (isKeyPressed(info))
+            this.handler.accept(object);
+    }
+
     public void consume(GameInfoWrapper info) {
-        if(isKeyReleased(info))
+        if (isKeyPressed(info))
             this.handler.accept(this.object);
     }
 
-    private boolean isKeyReleased(GameInfoWrapper info) {
-        if (isKeyPressed(info)) {
-            keyDown = true;
-            return false;
-        } else {
-            if (keyDown && isKeyUp(info)) {
-                keyDown = false;
-                return true;
-            }
-            keyDown = false;
-        }
-        return false;
-    }
-
-    public boolean isKeyUp(GameInfoWrapper info) {
-        return !isKeyPressed(info);
+    public boolean isKeyPressed(GameInfoWrapper info) {
+        Input input = info.gameContainer.getInput();
+        return input.isKeyDown(KEY);
     }
 }

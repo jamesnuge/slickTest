@@ -15,14 +15,14 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components.basicobjects;
+package xyz.jamesnuge.slicktest.objects.basic;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
-import xyz.jamesnuge.slicktest.objects.components.userData.GroundUserData;
+import xyz.jamesnuge.slicktest.objects.basic.userData.GroundUserData;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 

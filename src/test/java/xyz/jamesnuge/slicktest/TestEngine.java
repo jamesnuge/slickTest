@@ -15,12 +15,10 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.components;
+package xyz.jamesnuge.slicktest;
 
-import xyz.jamesnuge.slicktest.controls.KeyHandler;
+public class TestEngine extends Engine {
+    public static void main(String[] args) {
 
-import java.util.List;
-
-public interface Controllable<T> {
-    public List<KeyHandler<T>> getKeyHandlers();
+    }
 }

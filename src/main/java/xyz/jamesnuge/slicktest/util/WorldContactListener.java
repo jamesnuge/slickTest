@@ -20,26 +20,40 @@ package xyz.jamesnuge.slicktest.util;
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WorldContactListener implements ContactListener {
+    private Map<Fixture, ContactListener> fixtureContactListenerMap = new HashMap<>();
+
     @Override
     public void beginContact(Contact contact) {
-
+        fixtureContactListenerMap.get(contact.getFixtureA()).beginContact(contact);
+        fixtureContactListenerMap.get(contact.getFixtureB()).beginContact(contact);
     }
 
     @Override
     public void endContact(Contact contact) {
-
+        fixtureContactListenerMap.get(contact.getFixtureA()).endContact(contact);
+        fixtureContactListenerMap.get(contact.getFixtureB()).endContact(contact);
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
+        fixtureContactListenerMap.get(contact.getFixtureA()).preSolve(contact, oldManifold);
+        fixtureContactListenerMap.get(contact.getFixtureB()).preSolve(contact, oldManifold);
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
+        fixtureContactListenerMap.get(contact.getFixtureA()).postSolve(contact, impulse);
+        fixtureContactListenerMap.get(contact.getFixtureB()).postSolve(contact, impulse);
+    }
 
+    public void addListener(Fixture fixture, ContactListener listener) {
+        fixtureContactListenerMap.put(fixture, listener);
     }
 }
