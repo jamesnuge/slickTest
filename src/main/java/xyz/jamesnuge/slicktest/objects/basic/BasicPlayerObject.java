@@ -4,7 +4,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import xyz.jamesnuge.slicktest.GameInfoWrapper;
+import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.LatchedPressKeyHandler;
 import xyz.jamesnuge.slicktest.controls.PressKeyHandler;
@@ -15,15 +15,18 @@ import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class BasicPlayerObject extends RectangleObject<PlayerUserData> implements Controllable<BasicPlayerObject> {
 
     public static final float FORCE_EPSILON = 0.3f;
-    public static final int TOTAL_NUM_OF_JUMPS = 2;
+    public static final float JUMP_FORCE = 5f;
+    public static final int TOTAL_NUM_OF_JUMPS = 3;
     Map<Integer, KeyHandler<BasicPlayerObject>> keyHandlers = new HashMap<>();
     Map<Integer, ReleaseKeyHandler<BasicPlayerObject>> releaseKeyHandlers = new HashMap<>();
     LatchedPressKeyHandler<BasicPlayerObject> latchedPressKeyHandler;
@@ -35,15 +38,16 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     private PlayerUserData userData = new PlayerUserData();
 
     public BasicPlayerObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world, BodyDefinitions.getDynamicBodyDef());
+        super(pos, size, world);
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
         addJumpHandler(jump);
     }
 
     @Override
-    public List<KeyHandler<BasicPlayerObject>> getKeyHandlers() {
-        return null;
+    public List<KeyHandler> getHandlers() {
+        List<KeyHandler> list = new ArrayList<>();
+        list.add(keyHandlers.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
     }
 
     private void addJumpHandler(int KEY) {
@@ -103,12 +107,12 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
 
 
     @Override
-    public FixtureDef getFixtureDef() {
+    public FixtureDef createFixtureDef() {
         return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
     }
 
     @Override
-    protected BodyDef getBodyDef() {
+    public BodyDef createBodyDef() {
         return BodyDefinitions.getDynamicBodyDef();
     }
 
@@ -119,6 +123,11 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     @Override
     public PlayerUserData getUserData() {
         return userData;
+    }
+
+    @Override
+    public List<KeyHandler> getHandlers() {
+        return null;
     }
 
     public boolean isMovingY() {
@@ -143,7 +152,37 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
             object.isJumping = true;
             jumpLatch = true;
             numOfJumps--;
-            object.body.applyForceToCenter(new Vec2(0f, 15f));
+            object.body.applyForceToCenter(new Vec2(0f, JUMP_FORCE));
         }
     };
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BasicPlayerObject that = (BasicPlayerObject) o;
+
+        if (isJumping != that.isJumping) return false;
+        if (jumpLatch != that.jumpLatch) return false;
+        if (numOfJumps != that.numOfJumps) return false;
+        if (keyHandlers != null ? !keyHandlers.equals(that.keyHandlers) : that.keyHandlers != null) return false;
+        if (releaseKeyHandlers != null ? !releaseKeyHandlers.equals(that.releaseKeyHandlers) : that.releaseKeyHandlers != null)
+            return false;
+        if (latchedPressKeyHandler != null ? !latchedPressKeyHandler.equals(that.latchedPressKeyHandler) : that.latchedPressKeyHandler != null)
+            return false;
+        if (userData != null ? !userData.equals(that.userData) : that.userData != null) return false;
+        return !(jump != null ? !jump.equals(that.jump) : that.jump != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = keyHandlers != null ? keyHandlers.hashCode() : 0;
+        result = 31 * result + (releaseKeyHandlers != null ? releaseKeyHandlers.hashCode() : 0);
+        result = 31 * result + (latchedPressKeyHandler != null ? latchedPressKeyHandler.hashCode() : 0);
+        result = 31 * result + (userData != null ? userData.hashCode() : 0);
+        result = 31 * result + (jump != null ? jump.hashCode() : 0);
+        return result;
+    }
 }

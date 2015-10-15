@@ -18,5 +18,5 @@
 package xyz.jamesnuge.slicktest.objects.components;
 
 public abstract class EngineObjectUserData {
-
+    public abstract int getId();
 }

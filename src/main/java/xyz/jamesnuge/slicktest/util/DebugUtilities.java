@@ -31,4 +31,8 @@ public class DebugUtilities {
         g.drawString("x: " + b.getPosition().x, 200, 200);
         g.drawString("y: " + b.getPosition().y, 200, 220);
     }
+
+    public static void drawMiddleOfScreen(Graphics g) {
+        g.drawRect(Viewport.WIDTH/2, Viewport.HEIGHT/2, 2, 2);
+    }
 }

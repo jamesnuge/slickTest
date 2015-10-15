@@ -15,13 +15,10 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic.userData;
+package xyz.jamesnuge.slicktest.util;
 
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
-
-public class GroundUserData extends EngineObjectUserData {
-    @Override
-    public int getId() {
-        return 0;
-    }
+public class SimulationProperties {
+    public static final Float TIME_STEP = 1.0f / 60.f;
+    public static final Integer VELOCITY_ITERATIONS = 6;
+    public static final Integer POSITION_ITERATIONS = 3;
 }

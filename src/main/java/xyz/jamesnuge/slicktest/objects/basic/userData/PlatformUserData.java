@@ -20,4 +20,8 @@ package xyz.jamesnuge.slicktest.objects.basic.userData;
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
 public class PlatformUserData extends EngineObjectUserData {
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

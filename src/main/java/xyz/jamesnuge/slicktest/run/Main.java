@@ -19,7 +19,7 @@ package xyz.jamesnuge.slicktest.run;
 
 import org.newdawn.slick.AppGameContainer;
 import xyz.jamesnuge.slicktest.Engine;
-import xyz.jamesnuge.slicktest.Viewport;
+import xyz.jamesnuge.slicktest.util.Viewport;
 
 public class Main {
     public static void main(String[] args) {

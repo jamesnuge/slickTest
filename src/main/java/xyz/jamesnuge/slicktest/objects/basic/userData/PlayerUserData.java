@@ -21,4 +21,8 @@ import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
 public class PlayerUserData extends EngineObjectUserData {
 
+    @Override
+    public int getId() {
+        return 0;
+    }
 }

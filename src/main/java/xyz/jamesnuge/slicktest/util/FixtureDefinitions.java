@@ -28,7 +28,7 @@ public class FixtureDefinitions {
 
     public static FixtureDef getRectangleFixtureDefinition(Vec2 size) {
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(size.x, size.y);
+        shape.setAsBox(size.x/2, size.y/2);
         FixtureDef fd = new FixtureDef();
         fd.shape = shape;
         fd.density = 1;

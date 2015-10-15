@@ -17,7 +17,7 @@
 
 package xyz.jamesnuge.slicktest.controls;
 
-import xyz.jamesnuge.slicktest.GameInfoWrapper;
+import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 
 import java.util.function.Consumer;
 

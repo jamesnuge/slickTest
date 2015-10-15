@@ -23,7 +23,10 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
+import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.util.UserDataHelper;
+
+import java.util.List;
 
 public abstract class EngineObject<T extends EngineObjectUserData> implements Updatable {
 
@@ -33,9 +36,11 @@ public abstract class EngineObject<T extends EngineObjectUserData> implements Up
     abstract Vec2 getWorldCoordinates();
     abstract Vec2 getViewportCoordinates();
 
-    public abstract FixtureDef getFixtureDef();
-    protected abstract BodyDef getBodyDef();
+    public abstract FixtureDef createFixtureDef();
+    public abstract BodyDef createBodyDef();
 
+    protected abstract BodyDef getBodyDef();
+    protected abstract FixtureDef getFixtureDef();
 
     public void draw(Graphics graphics){
         graphics.draw(getGraphicalObject());
@@ -45,4 +50,5 @@ public abstract class EngineObject<T extends EngineObjectUserData> implements Up
     public void setUsetData(T userData){
         UserDataHelper.addUserData(body, userData);
     }
+    public abstract List<KeyHandler> getHandlers();
 }

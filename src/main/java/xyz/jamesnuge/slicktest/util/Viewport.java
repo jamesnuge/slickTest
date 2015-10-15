@@ -15,7 +15,7 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest;
+package xyz.jamesnuge.slicktest.util;
 
 import org.jbox2d.common.Vec2;
 import org.newdawn.slick.Graphics;

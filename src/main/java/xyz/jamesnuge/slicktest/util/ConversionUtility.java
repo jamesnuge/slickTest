@@ -18,7 +18,6 @@
 package xyz.jamesnuge.slicktest.util;
 
 import org.jbox2d.common.Vec2;
-import xyz.jamesnuge.slicktest.Viewport;
 
 public class ConversionUtility {
 

@@ -29,16 +29,16 @@ import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 public class BasicGroundObject extends RectangleObject<GroundUserData> {
 
     public BasicGroundObject(Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world, BodyDefinitions.getStaticBodyDef());
+        super(pos, size, world);
     }
 
     @Override
-    public FixtureDef getFixtureDef() {
+    public FixtureDef createFixtureDef() {
         return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
     }
 
     @Override
-    protected BodyDef getBodyDef() {
+    public BodyDef createBodyDef() {
         return BodyDefinitions.getStaticBodyDef();
     }
 

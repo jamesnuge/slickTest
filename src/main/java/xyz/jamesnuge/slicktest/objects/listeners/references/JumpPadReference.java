@@ -15,13 +15,20 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic.userData;
+package xyz.jamesnuge.slicktest.objects.listeners.references;
 
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
+import org.jbox2d.dynamics.Fixture;
+import xyz.jamesnuge.slicktest.objects.basic.JumpPadObject;
 
-public class GroundUserData extends EngineObjectUserData {
+public class JumpPadReference implements ObjectReference<JumpPadObject> {
+
     @Override
-    public int getId() {
-        return 0;
+    public boolean doesFixtureBelongToObject(Fixture fixture) {
+        return false;
+    }
+
+    @Override
+    public JumpPadObject getReferenceObject() {
+        return null;
     }
 }

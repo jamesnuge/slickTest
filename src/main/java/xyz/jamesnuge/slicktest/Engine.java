@@ -12,6 +12,9 @@ import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicGroundObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
+import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
+import xyz.jamesnuge.slicktest.util.SimulationProperties;
+import xyz.jamesnuge.slicktest.util.Viewport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,8 @@ public class Engine extends BasicGame {
     public static final Integer FPS = 60;
 
     public final GameInfoWrapper gameInfo = new GameInfoWrapper();
+
+    private List<EngineObject> objects = new ArrayList<>();
 
     public List<KeyHandler<CircleObject>> circleKeyHandlers = new ArrayList<>();
     public List<ReleaseKeyHandler<World>> worldKeyHandlers = new ArrayList<>();
@@ -42,12 +47,16 @@ public class Engine extends BasicGame {
     @Override
     public void init(GameContainer gameContainer) throws SlickException {
         world.setAllowSleep(true);
-        player = new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), new Vec2(0.1f, 0.2f), world);
-        platforms.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
+        objects.add(new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0, 2), new Vec2(0.1f, 0.2f), world));
+        objects.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
+        objects.add(new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world));
+
+        //player = new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), new Vec2(0.1f, 0.2f), world);
+        //platforms.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
         //platforms.add(new BasicPlatformObject(new Vec2(-2, 1.5f), new Vec2(2, 0.1f), world));
-        circles.add(player);
-        groundObject = new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world);
-        System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
+        //circles.add(player);
+        //groundObject = new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world);
+        //System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
     }
 
     public static boolean isPointInRectangle(Vec2 point, RectangleObject rect){
@@ -66,16 +75,19 @@ public class Engine extends BasicGame {
     }
 
     private void updateWorld() {
+        objects.stream().forEach(EngineObject::update);
         world.step(SimulationProperties.TIME_STEP, SimulationProperties.VELOCITY_ITERATIONS, SimulationProperties.POSITION_ITERATIONS);
-        circles.stream().forEach(circle -> circle.applyKeyHandlers(gameInfo));
-        circles.stream().forEach(EngineObject::update);
+        //circles.stream().forEach(circle -> circle.applyKeyHandlers(gameInfo));
+        //circles.stream().forEach(EngineObject::update);
     }
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
-        platforms.stream().forEach(platform -> platform.draw(graphics));
-        circles.stream().forEach(circleObject -> circleObject.draw(graphics));
-        groundObject.draw(graphics);
+        objects.stream().forEach(object -> object.draw(graphics));
+        //platforms.stream().forEach(platform -> platform.draw(graphics));
+        //circles.stream().forEach(circleObject -> circleObject.draw(graphics));
+        //groundObject.draw(graphics);
         DebugUtilities.drawPos(graphics, platforms.get(0).body);
+        DebugUtilities.drawMiddleOfScreen(graphics);
         Viewport.drawViewportInfo(graphics);
     }
 

@@ -22,6 +22,7 @@ import org.jbox2d.dynamics.World;
 import org.junit.Test;
 import org.newdawn.slick.Input;
 import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
+import xyz.jamesnuge.slicktest.util.SimulationProperties;
 
 public class JumpTest {
     World world = new World(new Vec2(0f, -9.8f));

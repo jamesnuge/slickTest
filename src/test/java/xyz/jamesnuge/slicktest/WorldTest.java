@@ -26,22 +26,12 @@ public class WorldTest {
 
     BodyDefinitions bds;
     World world = new World(new Vec2(0f, -9.8f));
+    Fixture f;
 
     @Test
     public void testWorldGravityUpdate() {
-        Body circle = buildCircle();
         Body ground = buildGround();
-        Vec2 oldPos = new Vec2(circle.getPosition());
-        for(int i = 0; i < 200; i++) {
-            System.out.println("x: " + circle.getPosition().x);
-            System.out.println("y: " + circle.getPosition().y);
-            System.out.println("\n");
-            world.step(1f / 60f, 6, 3);
-            //assertNotEquals(oldPos.y, circle.getPosition().y);
-        }
-        System.out.println("Final pos \n"
-                + "x: " + circle.getPosition().x + "\n"
-                + "y: " + circle.getPosition().y);
+        System.out.println(f.testPoint(new Vec2(10f,0f)));
     }
 
     public Body buildCircle() {
@@ -79,7 +69,7 @@ public class WorldTest {
         fd.friction = 0.3f;
 
         Body body = world.createBody(bd);
-        body.createFixture(fd);
+        f = body.createFixture(fd);
         return body;
     }
 }

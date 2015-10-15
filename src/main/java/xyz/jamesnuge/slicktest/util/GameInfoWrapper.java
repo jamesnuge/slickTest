@@ -1,4 +1,4 @@
-package xyz.jamesnuge.slicktest;
+package xyz.jamesnuge.slicktest.util;
 
 import org.newdawn.slick.GameContainer;
 

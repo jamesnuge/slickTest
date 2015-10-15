@@ -19,6 +19,7 @@ package xyz.jamesnuge.slicktest.objects.components;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
@@ -29,7 +30,10 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
     private Class userDataClass;
 
     private Rectangle graphicalObject;
-    public BodyDef bodyDef;
+
+
+    private BodyDef bodyDef;
+    private FixtureDef fixtureDef;
 
     public Vec2 getSize() {
         return new Vec2(size);
@@ -37,12 +41,13 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
     private Vec2 size;
 
-    public RectangleObject(Vec2 pos, Vec2 size, World world, BodyDef bodyDef) {
-        this.bodyDef = bodyDef;
+    public RectangleObject(Vec2 pos, Vec2 size, World world) {
+        this.bodyDef = createBodyDef();
         this.bodyDef.position.set(pos);
         this.body = world.createBody(bodyDef);
         this.size = size;
-        body.createFixture(this.getFixtureDef());
+        this.fixtureDef = createFixtureDef();
+        body.createFixture(fixtureDef);
         graphicalObject = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
     }
 
@@ -67,13 +72,24 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
     @Override
     public void update() {
-        graphicalObject.setY(ConversionUtility.toViewportY(this.body.getPosition().y));
-        graphicalObject.setX(ConversionUtility.toViewportX(this.body.getPosition().x));
+        graphicalObject.setY(ConversionUtility.toViewportY(getCenterPos().y));
+        graphicalObject.setX(ConversionUtility.toViewportX(getCenterPos().x));
     }
 
     public Vec2 getCenterPos() {
-        return new Vec2(body.getPosition().x-this.size.x/2, body.getPosition().y + this.size.y);
+        return new Vec2(body.getPosition().x-this.size.x/2, body.getPosition().y + this.size.y/2);
     }
+
+    @Override
+    protected BodyDef getBodyDef() {
+        return bodyDef;
+    }
+
+    @Override
+    protected FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
 
     public Vec2 getViewpointCenterPos() {
         return new Vec2();

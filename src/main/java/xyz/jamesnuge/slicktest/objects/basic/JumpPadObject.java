@@ -21,30 +21,16 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Rectangle;
-import xyz.jamesnuge.slicktest.objects.basic.userData.PlatformUserData;
+import xyz.jamesnuge.slicktest.objects.basic.userData.JumpPadUserData;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
-import xyz.jamesnuge.slicktest.util.ConversionUtility;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class BasicPlatformObject extends RectangleObject<PlatformUserData> {
-    public BasicPlatformObject(Vec2 pos, Vec2 size, World world) {
+public class JumpPadObject extends RectangleObject<JumpPadUserData> {
+    public static JumpPadUserData USER_DATA = new JumpPadUserData();
+
+    public JumpPadObject(Vec2 pos, Vec2 size, World world) {
         super(pos, size, world);
-
-        System.out.println("Body x: " + this.body.getPosition().x);
-        System.out.println("Body y: " + this.body.getPosition().y);
-        System.out.println("Graphical x: " + this.getDrawableObject().getX());
-        System.out.println("Graphical y: " + this.getDrawableObject().getY());
-    }
-
-    @Override
-    public void draw(Graphics g) {
-        super.draw(g);
-        g.draw(new Rectangle(ConversionUtility.toViewportX(this.body.getPosition().x), ConversionUtility.toViewportY(this.body.getPosition().y), 1, 1));
-        g.drawString("graphical x: " + this.getDrawableObject().getX(), 400, 400);
-        g.drawString("graphical y: " + this.getDrawableObject().getY(), 400, 420);
     }
 
     @Override
@@ -54,16 +40,11 @@ public class BasicPlatformObject extends RectangleObject<PlatformUserData> {
 
     @Override
     public BodyDef createBodyDef() {
-        return BodyDefinitions.getKinematicBodyDef();
+        return BodyDefinitions.getStaticBodyDef();
     }
 
     @Override
-    public PlatformUserData getUserData() {
-        return null;
-    }
-
-    @Override
-    public boolean hasKeyHandlers() {
-        return false;
+    public JumpPadUserData getUserData() {
+        return USER_DATA;
     }
 }
