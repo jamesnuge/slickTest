@@ -11,7 +11,6 @@ import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
 import xyz.jamesnuge.slicktest.objects.components.Controllable;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.util.DebugUtilities;
 import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.util.SimulationProperties;
 import xyz.jamesnuge.slicktest.util.Viewport;
@@ -46,18 +45,10 @@ public class Engine extends BasicGame {
         objects.add(new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0, 2), new Vec2(0.1f, 0.2f), world));
         objects.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
         objects.add(new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world));
-
-        //player = new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0,2), new Vec2(0.1f, 0.2f), world);
-        //platforms.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
-        //platforms.add(new BasicPlatformObject(new Vec2(-2, 1.5f), new Vec2(2, 0.1f), world));
-        //circles.add(player);
-        //groundObject = new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world);
-        //System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
-
         gameInfo.update(gameContainer, i);
         updateWorld();
         objects.stream().forEach(object -> {
@@ -70,17 +61,10 @@ public class Engine extends BasicGame {
     private void updateWorld() {
         objects.stream().forEach(EngineObject::update);
         world.step(SimulationProperties.TIME_STEP, SimulationProperties.VELOCITY_ITERATIONS, SimulationProperties.POSITION_ITERATIONS);
-        //circles.stream().forEach(circle -> circle.applyKeyHandlers(gameInfo));
-        //circles.stream().forEach(EngineObject::update);
     }
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         objects.stream().forEach(object -> object.draw(graphics));
-        //platforms.stream().forEach(platform -> platform.draw(graphics));
-        //circles.stream().forEach(circleObject -> circleObject.draw(graphics));
-        //groundObject.draw(graphics);
-        DebugUtilities.drawPos(graphics, objects.get(0).body);
-        DebugUtilities.drawMiddleOfScreen(graphics);
         Viewport.drawViewportInfo(graphics);
     }
 

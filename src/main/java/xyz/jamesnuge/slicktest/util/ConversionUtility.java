@@ -57,6 +57,10 @@ public class ConversionUtility {
         return width * PIXEL_TO_METRE_RATIO;
     }
 
+    public static float toViewportAngle(float angle) {
+        return angle;
+    }
+
     public static float toViewportX(float posX) {
         float diff = fromMetreToPixel(posX) - Viewport.POSITION.x;
         return Viewport.WIDTH / 2 + diff;

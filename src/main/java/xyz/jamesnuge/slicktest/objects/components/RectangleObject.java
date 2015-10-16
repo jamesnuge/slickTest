@@ -21,15 +21,18 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
 
 public abstract class RectangleObject<T extends EngineObjectUserData> extends EngineObject<T> {
 
     private Class userDataClass;
 
-    private Rectangle graphicalObject;
+    private Shape graphicalObject;
+    private Rectangle rectangle;
 
 
     private BodyDef bodyDef;
@@ -48,7 +51,8 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
         this.size = size;
         this.fixtureDef = createFixtureDef();
         body.createFixture(fixtureDef);
-        graphicalObject = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
+        rectangle = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
+        graphicalObject = new Polygon(rectangle.getPoints());
     }
 
     public Shape getDrawableObject() {
@@ -72,8 +76,9 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
     @Override
     public void update() {
-        graphicalObject.setY(ConversionUtility.toViewportY(getCenterPos().y));
-        graphicalObject.setX(ConversionUtility.toViewportX(getCenterPos().x));
+        rectangle.setY(ConversionUtility.toViewportY(getCenterPos().y));
+        rectangle.setX(ConversionUtility.toViewportX(getCenterPos().x));
+        graphicalObject = rectangle.transform(Transform.createRotateTransform(ConversionUtility.toViewportAngle(body.getAngle()), rectangle.getCenterX(), rectangle.getCenterY()));
     }
 
     public Vec2 getCenterPos() {
