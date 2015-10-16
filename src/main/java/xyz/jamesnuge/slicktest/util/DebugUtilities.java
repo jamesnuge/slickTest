@@ -27,6 +27,10 @@ public class DebugUtilities {
         g.drawString("Linear Velocity y: " + b.getLinearVelocity().y, 200, 220);
     }
 
+    public static void drawAngle(Graphics g, Body b){
+        g.drawString("Body angle: " + b.getAngle(), 200, 200);
+    }
+
     public static void drawPos(Graphics g, Body b) {
         g.drawString("x: " + b.getPosition().x, 200, 200);
         g.drawString("y: " + b.getPosition().y, 200, 220);

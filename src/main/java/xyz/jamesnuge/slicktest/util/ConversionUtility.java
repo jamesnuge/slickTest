@@ -58,7 +58,7 @@ public class ConversionUtility {
     }
 
     public static float toViewportAngle(float angle) {
-        return angle;
+        return (float)(Math.toRadians(360) - angle);
     }
 
     public static float toViewportX(float posX) {

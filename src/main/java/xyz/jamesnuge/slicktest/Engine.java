@@ -11,6 +11,7 @@ import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
 import xyz.jamesnuge.slicktest.objects.components.Controllable;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
+import xyz.jamesnuge.slicktest.util.DebugUtilities;
 import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.util.SimulationProperties;
 import xyz.jamesnuge.slicktest.util.Viewport;
@@ -65,6 +66,7 @@ public class Engine extends BasicGame {
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         objects.stream().forEach(object -> object.draw(graphics));
+        DebugUtilities.drawAngle(graphics, objects.get(0).body);
         Viewport.drawViewportInfo(graphics);
     }
 

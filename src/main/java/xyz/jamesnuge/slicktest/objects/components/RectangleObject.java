@@ -78,7 +78,9 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
     public void update() {
         rectangle.setY(ConversionUtility.toViewportY(getCenterPos().y));
         rectangle.setX(ConversionUtility.toViewportX(getCenterPos().x));
-        graphicalObject = rectangle.transform(Transform.createRotateTransform(ConversionUtility.toViewportAngle(body.getAngle()), rectangle.getCenterX(), rectangle.getCenterY()));
+        if (body.getAngle() != 0) {
+            graphicalObject = rectangle.transform(Transform.createRotateTransform(ConversionUtility.toViewportAngle(body.getAngle()), rectangle.getCenterX(), rectangle.getCenterY()));
+        }
     }
 
     public Vec2 getCenterPos() {
