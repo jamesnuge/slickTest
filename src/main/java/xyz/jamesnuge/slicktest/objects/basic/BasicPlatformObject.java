@@ -61,9 +61,4 @@ public class BasicPlatformObject extends RectangleObject<PlatformUserData> {
     public PlatformUserData getUserData() {
         return null;
     }
-
-    @Override
-    public boolean hasKeyHandlers() {
-        return false;
-    }
 }

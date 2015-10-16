@@ -23,28 +23,36 @@ import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import java.util.function.Consumer;
 
 public class PressKeyHandler<T> implements KeyHandler<T>{
-    public final int KEY;
+    public final int key;
+
     public Consumer<T> handler;
     public T object;
-
-    public PressKeyHandler(int KEY, Consumer<T> handler, T object) {
-        this.KEY = KEY;
+    public PressKeyHandler(int key, Consumer<T> handler, T object) {
+        this.key = key;
         this.handler = handler;
         this.object = object;
     }
 
+    public int getKey() {
+        return key;
+    }
+
     public void consumeOther(GameInfoWrapper info, T object) {
-        if (isKeyPressed(info))
+        if (isKeyPressed(info)) {
+            System.out.println("Handler hit");
             this.handler.accept(object);
+        }
     }
 
     public void consume(GameInfoWrapper info) {
-        if (isKeyPressed(info))
+        if (isKeyPressed(info)) {
+            System.out.println("Handler hit");
             this.handler.accept(this.object);
+        }
     }
 
     public boolean isKeyPressed(GameInfoWrapper info) {
         Input input = info.gameContainer.getInput();
-        return input.isKeyDown(KEY);
+        return input.isKeyDown(key);
     }
 }

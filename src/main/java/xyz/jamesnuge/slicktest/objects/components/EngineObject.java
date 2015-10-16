@@ -23,10 +23,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
-import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.util.UserDataHelper;
-
-import java.util.List;
 
 public abstract class EngineObject<T extends EngineObjectUserData> implements Updatable {
 
@@ -50,5 +47,4 @@ public abstract class EngineObject<T extends EngineObjectUserData> implements Up
     public void setUsetData(T userData){
         UserDataHelper.addUserData(body, userData);
     }
-    public abstract List<KeyHandler> getHandlers();
 }

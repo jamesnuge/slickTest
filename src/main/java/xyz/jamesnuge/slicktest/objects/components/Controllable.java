@@ -22,5 +22,5 @@ import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import java.util.List;
 
 public interface Controllable<T> {
-    public List<KeyHandler<T>> getKeyHandlers();
+    List<KeyHandler<T>> getKeyHandlers();
 }

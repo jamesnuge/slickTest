@@ -4,7 +4,6 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.LatchedPressKeyHandler;
 import xyz.jamesnuge.slicktest.controls.PressKeyHandler;
@@ -14,21 +13,19 @@ import xyz.jamesnuge.slicktest.objects.components.Controllable;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
+import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class BasicPlayerObject extends RectangleObject<PlayerUserData> implements Controllable<BasicPlayerObject> {
 
     public static final float FORCE_EPSILON = 0.3f;
     public static final float JUMP_FORCE = 5f;
     public static final int TOTAL_NUM_OF_JUMPS = 3;
-    Map<Integer, KeyHandler<BasicPlayerObject>> keyHandlers = new HashMap<>();
-    Map<Integer, ReleaseKeyHandler<BasicPlayerObject>> releaseKeyHandlers = new HashMap<>();
+    List<KeyHandler<BasicPlayerObject>> keyHandlers = new ArrayList<>();
+    List<ReleaseKeyHandler<BasicPlayerObject>> releaseKeyHandlers = new ArrayList<>();
     LatchedPressKeyHandler<BasicPlayerObject> latchedPressKeyHandler;
     public boolean isJumping = false;
     private boolean jumpLatch = false;
@@ -42,12 +39,6 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
         addJumpHandler(jump);
-    }
-
-    @Override
-    public List<KeyHandler> getHandlers() {
-        List<KeyHandler> list = new ArrayList<>();
-        list.add(keyHandlers.entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
     }
 
     private void addJumpHandler(int KEY) {
@@ -67,25 +58,25 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
 
     private void addMoveLeftHandler(int KEY){
         addMoveLeftReleaseHandler(KEY);
-        keyHandlers.put(KEY, new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
+        keyHandlers.add(new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(-0.5f, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveLeftReleaseHandler(int key) {
-        releaseKeyHandlers.put(key, new ReleaseKeyHandler<>(key, object -> object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y)), this));
+        releaseKeyHandlers.add(new ReleaseKeyHandler<>(key, object -> object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveRightHandler(int KEY){
         addMoveRightReleaseHandler(KEY);
-        keyHandlers.put(KEY, new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(0.5f, object.body.getLinearVelocity().y)), this));
+        keyHandlers.add(new PressKeyHandler<>(KEY, (object) -> object.body.setLinearVelocity(new Vec2(0.5f, object.body.getLinearVelocity().y)), this));
     }
 
     private void addMoveRightReleaseHandler(int key) {
-        releaseKeyHandlers.put(key, new ReleaseKeyHandler<>(key, object -> object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y)), this));
+        releaseKeyHandlers.add(new ReleaseKeyHandler<>(key, object -> object.body.setLinearVelocity(new Vec2(0, object.body.getLinearVelocity().y)), this));
     }
 
     public void applyKeyHandlers(GameInfoWrapper info) {
-        keyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
-        releaseKeyHandlers.entrySet().stream().map(Map.Entry::getValue).forEach(keyHandler -> keyHandler.consume(info));
+        keyHandlers.stream().forEach(keyHandler -> keyHandler.consume(info));
+        releaseKeyHandlers.stream().forEach(keyHandler -> keyHandler.consume(info));
         latchedPressKeyHandler.consume(info);
     }
 
@@ -123,11 +114,6 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     @Override
     public PlayerUserData getUserData() {
         return userData;
-    }
-
-    @Override
-    public List<KeyHandler> getHandlers() {
-        return null;
     }
 
     public boolean isMovingY() {
@@ -173,7 +159,6 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
             return false;
         if (userData != null ? !userData.equals(that.userData) : that.userData != null) return false;
         return !(jump != null ? !jump.equals(that.jump) : that.jump != null);
-
     }
 
     @Override
@@ -184,5 +169,14 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
         result = 31 * result + (userData != null ? userData.hashCode() : 0);
         result = 31 * result + (jump != null ? jump.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public List<KeyHandler<BasicPlayerObject>> getKeyHandlers() {
+        List<KeyHandler<BasicPlayerObject>> list = new ArrayList<>();
+        list.addAll(keyHandlers);
+        list.addAll(releaseKeyHandlers);
+        list.add(latchedPressKeyHandler);
+        return list;
     }
 }

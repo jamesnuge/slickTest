@@ -5,13 +5,13 @@ import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
 import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
-import xyz.jamesnuge.slicktest.objects.basic.BasicPlatformObject;
-import xyz.jamesnuge.slicktest.objects.components.CircleObject;
-import xyz.jamesnuge.slicktest.util.DebugUtilities;
-import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicGroundObject;
+import xyz.jamesnuge.slicktest.objects.basic.BasicPlatformObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
+import xyz.jamesnuge.slicktest.objects.components.CircleObject;
+import xyz.jamesnuge.slicktest.objects.components.Controllable;
+import xyz.jamesnuge.slicktest.objects.components.EngineObject;
+import xyz.jamesnuge.slicktest.util.DebugUtilities;
 import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 import xyz.jamesnuge.slicktest.util.SimulationProperties;
 import xyz.jamesnuge.slicktest.util.Viewport;
@@ -30,10 +30,6 @@ public class Engine extends BasicGame {
 
     public List<KeyHandler<CircleObject>> circleKeyHandlers = new ArrayList<>();
     public List<ReleaseKeyHandler<World>> worldKeyHandlers = new ArrayList<>();
-    public List<BasicPlayerObject> circles = new ArrayList<>();
-    public BasicGroundObject groundObject;
-    public BasicPlayerObject player;
-    public List<BasicPlatformObject> platforms = new ArrayList<>();
 
     public World world = new World(new Vec2(0.0f, -10.0f));
     {
@@ -59,19 +55,16 @@ public class Engine extends BasicGame {
         //System.out.println(isPointInRectangle(new Vec2(0f, 2f), groundObject));
     }
 
-    public static boolean isPointInRectangle(Vec2 point, RectangleObject rect){
-        boolean x = point.x > rect.body.getPosition().x - rect.getSize().x && point.x < rect.body.getPosition().x + rect.getSize().x;
-        boolean y = point.y > rect.body.getPosition().y - rect.getSize().y && point.y < rect.body.getPosition().y + rect.getSize().y;
-        return x && y;
-    }
-
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
 
         gameInfo.update(gameContainer, i);
         updateWorld();
-        circleKeyHandlers.stream().forEach(circleKeyHandlers -> circleKeyHandlers.consume(gameInfo));
-        worldKeyHandlers.stream().forEach(worldKeyHandler -> worldKeyHandler.consume(gameInfo));
+        objects.stream().forEach(object -> {
+            if (object instanceof Controllable) {
+                ((Controllable<?>)object).getKeyHandlers().stream().forEach(handler -> handler.consume(gameInfo));
+            }
+        });
     }
 
     private void updateWorld() {
@@ -86,7 +79,7 @@ public class Engine extends BasicGame {
         //platforms.stream().forEach(platform -> platform.draw(graphics));
         //circles.stream().forEach(circleObject -> circleObject.draw(graphics));
         //groundObject.draw(graphics);
-        DebugUtilities.drawPos(graphics, platforms.get(0).body);
+        DebugUtilities.drawPos(graphics, objects.get(0).body);
         DebugUtilities.drawMiddleOfScreen(graphics);
         Viewport.drawViewportInfo(graphics);
     }

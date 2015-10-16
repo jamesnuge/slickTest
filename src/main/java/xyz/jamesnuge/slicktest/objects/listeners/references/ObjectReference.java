@@ -19,8 +19,26 @@ package xyz.jamesnuge.slicktest.objects.listeners.references;
 
 import org.jbox2d.dynamics.Fixture;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
+import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public interface ObjectReference<T extends EngineObject> {
-    boolean doesFixtureBelongToObject(Fixture fixture);
-    T getReferenceObject();
+public abstract class ObjectReference<T extends EngineObject, S extends EngineObjectUserData> {
+    T referenceObject;
+
+    public ObjectReference(T referenceObject) {
+        this.referenceObject = referenceObject;
+    }
+
+    public boolean doesFixtureBelongToObject(Fixture fixture) {
+        EngineObjectUserData userData = (EngineObjectUserData)fixture.getUserData();
+        return userData.getId() == referenceObject.getUserData().getId();
+    }
+
+    @SuppressWarnings("unchecked")
+    S getUserData(EngineObjectUserData data) {
+        return (S)data;
+    }
+
+    T getReferenceObject() {
+        return referenceObject;
+    }
 }

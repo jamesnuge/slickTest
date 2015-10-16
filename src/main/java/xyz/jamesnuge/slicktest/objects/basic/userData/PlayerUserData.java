@@ -23,6 +23,6 @@ public class PlayerUserData extends EngineObjectUserData {
 
     @Override
     public int getId() {
-        return 0;
+        return 1;
     }
 }

@@ -33,10 +33,10 @@ public class LatchedPressKeyHandler<T> extends PressKeyHandler<T> {
     public boolean isKeyPressed(GameInfoWrapper info) {
         Input input = info.gameContainer.getInput();
         if (!latched) {
-            latched = input.isKeyDown(KEY);
+            latched = input.isKeyDown(key);
             return latched;
         } else {
-            latched = input.isKeyDown(KEY);
+            latched = input.isKeyDown(key);
             return false;
         }
     }

@@ -19,12 +19,19 @@ package xyz.jamesnuge.slicktest.objects.listeners.references;
 
 import org.jbox2d.dynamics.Fixture;
 import xyz.jamesnuge.slicktest.objects.basic.JumpPadObject;
+import xyz.jamesnuge.slicktest.objects.basic.userData.JumpPadUserData;
+import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class JumpPadReference implements ObjectReference<JumpPadObject> {
+public class JumpPadReference extends ObjectReference<JumpPadObject,JumpPadUserData> {
+
+    public JumpPadReference(JumpPadObject referenceObject) {
+        super(referenceObject);
+    }
 
     @Override
     public boolean doesFixtureBelongToObject(Fixture fixture) {
-        return false;
+        EngineObjectUserData userData = (EngineObjectUserData)fixture.getUserData();
+        return userData.getId() == referenceObject.getUserData().getId();
     }
 
     @Override
