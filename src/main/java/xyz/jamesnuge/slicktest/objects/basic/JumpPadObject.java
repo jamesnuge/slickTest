@@ -30,7 +30,7 @@ public class JumpPadObject extends RectangleObject<JumpPadUserData> {
     public static JumpPadUserData USER_DATA = new JumpPadUserData();
 
     public JumpPadObject(Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world);
+        super(pos, size, world, USER_DATA);
     }
 
     @Override
@@ -46,5 +46,10 @@ public class JumpPadObject extends RectangleObject<JumpPadUserData> {
     @Override
     public JumpPadUserData getUserData() {
         return USER_DATA;
+    }
+
+    @Override
+    public boolean hasContactListener() {
+        return true;
     }
 }

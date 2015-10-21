@@ -15,31 +15,10 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic.userData;
+package xyz.jamesnuge.slicktest.objects.listeners;
 
 import org.jbox2d.callbacks.ContactListener;
-import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class PlayerUserData implements EngineObjectUserData {
+public interface EngineContactListener extends ContactListener {
 
-    @Override
-    public int getId() {
-        return 1;
-    }
-
-    @Override
-    public ContactListener getContactListener() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends EngineObject> getObjectClass() {
-        return null;
-    }
-
-    @Override
-    public boolean hasContactListener() {
-        return false;
-    }
 }

@@ -29,6 +29,15 @@ public abstract class CircleObject<T extends EngineObjectUserData> extends Engin
     public Circle graphicalObject;
     public float radius;
 
+    public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef, T userData) {
+        super(userData);
+        bodyDef.position.set(pos);
+        this.body = world.createBody(bodyDef);
+        this.body.createFixture(FixtureDefinitions.getCircleFixtureDefinition(radius));
+        this.radius = radius;
+        graphicalObject = new Circle(ConversionUtility.toViewportPos(pos).x, ConversionUtility.toViewportPos(pos).y, ConversionUtility.fromMetreToPixel(radius));
+    }
+
     public CircleObject(Vec2 pos, float radius, World world, BodyDef bodyDef) {
         bodyDef.position.set(pos);
         this.body = world.createBody(bodyDef);

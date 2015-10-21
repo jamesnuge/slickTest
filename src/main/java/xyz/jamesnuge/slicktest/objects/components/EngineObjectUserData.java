@@ -17,6 +17,11 @@
 
 package xyz.jamesnuge.slicktest.objects.components;
 
-public abstract class EngineObjectUserData {
-    public abstract int getId();
+import org.jbox2d.callbacks.ContactListener;
+
+public interface EngineObjectUserData<T extends EngineObject> {
+    int getId();
+    ContactListener getContactListener();
+    Class<T> getObjectClass();
+    boolean hasContactListener();
 }

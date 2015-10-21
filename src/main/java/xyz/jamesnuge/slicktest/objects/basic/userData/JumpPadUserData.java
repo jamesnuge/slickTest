@@ -17,12 +17,32 @@
 
 package xyz.jamesnuge.slicktest.objects.basic.userData;
 
+import org.jbox2d.callbacks.ContactListener;
+import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 import xyz.jamesnuge.slicktest.objects.listeners.JumpPadContactListener;
 
-public class JumpPadUserData extends EngineObjectUserData {
+public class JumpPadUserData implements EngineObjectUserData {
+
+    private JumpPadContactListener listener = new JumpPadContactListener();
+
     @Override
     public int getId() {
         return JumpPadContactListener.JUMP_PAD_FIXTURE_ID;
+    }
+
+    @Override
+    public ContactListener getContactListener() {
+        return listener;
+    }
+
+    @Override
+    public Class<? extends EngineObject> getObjectClass() {
+        return null;
+    }
+
+    @Override
+    public boolean hasContactListener() {
+        return true;
     }
 }

@@ -23,15 +23,17 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
+import xyz.jamesnuge.slicktest.objects.basic.userData.EmptyUserData;
 import xyz.jamesnuge.slicktest.objects.basic.userData.PlatformUserData;
+import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
-public class BasicPlatformObject extends RectangleObject<PlatformUserData> {
+public class BasicPlatformObject extends RectangleObject<EngineObjectUserData> {
     public BasicPlatformObject(Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world);
+        super(pos, size, world, EmptyUserData.getInstance());
 
         System.out.println("Body x: " + this.body.getPosition().x);
         System.out.println("Body y: " + this.body.getPosition().y);
@@ -60,5 +62,10 @@ public class BasicPlatformObject extends RectangleObject<PlatformUserData> {
     @Override
     public PlatformUserData getUserData() {
         return null;
+    }
+
+    @Override
+    public boolean hasContactListener() {
+        return false;
     }
 }

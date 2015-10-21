@@ -15,31 +15,22 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic.userData;
+package xyz.jamesnuge.slicktest.logic.collision;
 
-import org.jbox2d.callbacks.ContactListener;
-import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Fixture;
+import org.jbox2d.dynamics.World;
+import org.junit.Test;
+import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 
-public class PlayerUserData implements EngineObjectUserData {
+public class CollisionLogicTest {
 
-    @Override
-    public int getId() {
-        return 1;
-    }
+    BodyDefinitions bds;
+    World world = new World(new Vec2(0f, -9.8f));
+    Fixture f;
 
-    @Override
-    public ContactListener getContactListener() {
-        return null;
-    }
+    @Test
+    public void testCollisionHandlerFires() {
 
-    @Override
-    public Class<? extends EngineObject> getObjectClass() {
-        return null;
-    }
-
-    @Override
-    public boolean hasContactListener() {
-        return false;
     }
 }

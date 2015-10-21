@@ -39,14 +39,12 @@ public class PressKeyHandler<T> implements KeyHandler<T>{
 
     public void consumeOther(GameInfoWrapper info, T object) {
         if (isKeyPressed(info)) {
-            System.out.println("Handler hit");
             this.handler.accept(object);
         }
     }
 
     public void consume(GameInfoWrapper info) {
         if (isKeyPressed(info)) {
-            System.out.println("Handler hit");
             this.handler.accept(this.object);
         }
     }

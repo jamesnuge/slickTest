@@ -44,6 +44,18 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
     private Vec2 size;
 
+    public RectangleObject(Vec2 pos, Vec2 size, World world, T userData) {
+        super(userData);
+        this.bodyDef = createBodyDef();
+        this.bodyDef.position.set(pos);
+        this.body = world.createBody(bodyDef);
+        this.size = size;
+        this.fixtureDef = createFixtureDef();
+        body.createFixture(fixtureDef);
+        rectangle = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
+        graphicalObject = new Polygon(rectangle.getPoints());
+    }
+
     public RectangleObject(Vec2 pos, Vec2 size, World world) {
         this.bodyDef = createBodyDef();
         this.bodyDef.position.set(pos);

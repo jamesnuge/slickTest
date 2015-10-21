@@ -21,11 +21,16 @@ import org.jbox2d.callbacks.ContactListener;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class PlayerUserData implements EngineObjectUserData {
+public class EmptyUserData<T extends EngineObject> implements EngineObjectUserData<T> {
+    public static final EngineObjectUserData<?> INSTANCE = new EmptyUserData<>();
+
+    public static <T extends EngineObject> EngineObjectUserData<T> getInstance() {
+        return (EngineObjectUserData<T>) INSTANCE;
+    }
 
     @Override
     public int getId() {
-        return 1;
+        return 0;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class PlayerUserData implements EngineObjectUserData {
     }
 
     @Override
-    public Class<? extends EngineObject> getObjectClass() {
+    public Class getObjectClass() {
         return null;
     }
 

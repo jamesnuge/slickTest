@@ -15,31 +15,9 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic.userData;
+package xyz.jamesnuge.slicktest.logic.collision;
 
-import org.jbox2d.callbacks.ContactListener;
-import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
-
-public class PlayerUserData implements EngineObjectUserData {
-
-    @Override
-    public int getId() {
-        return 1;
-    }
-
-    @Override
-    public ContactListener getContactListener() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends EngineObject> getObjectClass() {
-        return null;
-    }
-
-    @Override
-    public boolean hasContactListener() {
-        return false;
-    }
+public interface CollisionHandler<T extends CollisionEvent, S extends CollisionEvent> {
+    void processCollision(T event);
+    S getCollisionEvent();
 }

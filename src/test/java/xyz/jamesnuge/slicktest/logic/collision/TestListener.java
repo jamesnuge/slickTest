@@ -15,41 +15,22 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.listeners;
+package xyz.jamesnuge.slicktest.logic.collision;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.collision.Manifold;
-import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
-import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class JumpPadContactListener implements ContactListener {
-    public static final int JUMP_PAD_FIXTURE_ID = 0x0000;
+public class TestListener implements ContactListener {
+    public static final int TEST_LISTENER_ID = 0x9000;
 
     @Override
     public void beginContact(Contact contact) {
-        Fixture padFixture;
-        Fixture objectFixture;
-
         Fixture a = contact.getFixtureA();
         Fixture b = contact.getFixtureB();
 
-        if (((EngineObjectUserData)a.getUserData()).getId() == JUMP_PAD_FIXTURE_ID) {
-            padFixture = a;
-            objectFixture = b;
-        } else {
-            if (((EngineObjectUserData)b.getUserData()).getId() == JUMP_PAD_FIXTURE_ID) {
-                padFixture = b;
-                objectFixture = a;
-            } else {
-                throw new IllegalStateException();
-            }
-        }
-        System.out.println("Applying jump force");
-        objectFixture.getBody().applyForceToCenter(new Vec2(0, BasicPlayerObject.JUMP_FORCE));
     }
 
     @Override

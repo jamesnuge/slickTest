@@ -17,17 +17,25 @@
 
 package xyz.jamesnuge.slicktest.objects.components;
 
+import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
-import xyz.jamesnuge.slicktest.util.UserDataHelper;
 
 public abstract class EngineObject<T extends EngineObjectUserData> implements Updatable {
 
+
+
     public Body body;
+    public T userData;
+
+    public EngineObject(T userData) {
+        this.userData = userData;
+    }
+    public EngineObject(){}
 
     abstract Shape getGraphicalObject();
     abstract Vec2 getWorldCoordinates();
@@ -42,9 +50,27 @@ public abstract class EngineObject<T extends EngineObjectUserData> implements Up
     public void draw(Graphics graphics){
         graphics.draw(getGraphicalObject());
     }
-    public abstract T getUserData();
 
-    public void setUsetData(T userData){
-        UserDataHelper.addUserData(body, userData);
+    public T getUserData() {
+        if (userData != null) {
+            return userData;
+        } else {
+            throw new IllegalStateException("User data has not been set for this object");
+        }
     }
+
+    public void setUserData(T userData){
+        this.userData = userData;
+    }
+
+    public abstract boolean hasContactListener();
+
+    public ContactListener getContactListener() {
+        if (hasContactListener()) {
+            return userData.getContactListener();
+        } else {
+            throw new IllegalStateException("Object does not have contact listener");
+        }
+    }
+
 }

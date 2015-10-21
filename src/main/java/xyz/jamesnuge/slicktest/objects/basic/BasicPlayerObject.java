@@ -1,5 +1,6 @@
 package xyz.jamesnuge.slicktest.objects.basic;
 
+import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
@@ -8,8 +9,10 @@ import xyz.jamesnuge.slicktest.controls.KeyHandler;
 import xyz.jamesnuge.slicktest.controls.LatchedPressKeyHandler;
 import xyz.jamesnuge.slicktest.controls.PressKeyHandler;
 import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
+import xyz.jamesnuge.slicktest.objects.basic.userData.EmptyUserData;
 import xyz.jamesnuge.slicktest.objects.basic.userData.PlayerUserData;
 import xyz.jamesnuge.slicktest.objects.components.Controllable;
+import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class BasicPlayerObject extends RectangleObject<PlayerUserData> implements Controllable<BasicPlayerObject> {
+public class BasicPlayerObject extends RectangleObject<EngineObjectUserData> implements Controllable<BasicPlayerObject> {
 
     public static final float FORCE_EPSILON = 0.3f;
     public static final float JUMP_FORCE = 5f;
@@ -35,7 +38,8 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
     private PlayerUserData userData = new PlayerUserData();
 
     public BasicPlayerObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world);
+        super(pos, size, world, EmptyUserData.getInstance());
+        setUserData(userData);
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
         addJumpHandler(jump);
@@ -107,13 +111,19 @@ public class BasicPlayerObject extends RectangleObject<PlayerUserData> implement
         return BodyDefinitions.getDynamicBodyDef();
     }
 
-    public void setUserData(PlayerUserData userData) {
-        this.userData = userData;
-    }
-
     @Override
     public PlayerUserData getUserData() {
         return userData;
+    }
+
+    @Override
+    public boolean hasContactListener() {
+        return false;
+    }
+
+    @Override
+    public ContactListener getContactListener() {
+        throw new IllegalStateException("Object does not contain contact listener");
     }
 
     public boolean isMovingY() {

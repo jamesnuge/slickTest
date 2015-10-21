@@ -15,42 +15,46 @@
  * research or research related activities upon written approval.
  */
 
-package xyz.jamesnuge.slicktest.objects.basic;
+package xyz.jamesnuge.slicktest.logic.collision;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import xyz.jamesnuge.slicktest.objects.basic.userData.EmptyUserData;
-import xyz.jamesnuge.slicktest.objects.basic.userData.GroundUserData;
-import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
-import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
-import xyz.jamesnuge.slicktest.util.BodyDefinitions;
-import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
+import xyz.jamesnuge.slicktest.objects.components.CircleObject;
 
-public class BasicGroundObject extends RectangleObject<EngineObjectUserData> {
-
-    public BasicGroundObject(Vec2 pos, Vec2 size, World world) {
-        super(pos, size, world, EmptyUserData.getInstance());
+public class TestEngineObject extends CircleObject<TestObjectUserData> {
+    public TestEngineObject(Vec2 pos, float radius, World world, BodyDef bodyDef) {
+        super(pos, radius, world, bodyDef);
     }
 
     @Override
     public FixtureDef createFixtureDef() {
-        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+        return null;
     }
 
     @Override
     public BodyDef createBodyDef() {
-        return BodyDefinitions.getStaticBodyDef();
+        return null;
     }
 
     @Override
-    public GroundUserData getUserData() {
-        return new GroundUserData();
+    protected BodyDef getBodyDef() {
+        return null;
+    }
+
+    @Override
+    protected FixtureDef getFixtureDef() {
+        return null;
+    }
+
+    @Override
+    public TestObjectUserData getUserData() {
+        return null;
     }
 
     @Override
     public boolean hasContactListener() {
-        return false;
+        return true;
     }
 }

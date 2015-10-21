@@ -3,18 +3,13 @@ package xyz.jamesnuge.slicktest;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 import org.newdawn.slick.*;
-import xyz.jamesnuge.slicktest.controls.KeyHandler;
-import xyz.jamesnuge.slicktest.controls.ReleaseKeyHandler;
 import xyz.jamesnuge.slicktest.objects.basic.BasicGroundObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicPlatformObject;
 import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
-import xyz.jamesnuge.slicktest.objects.components.CircleObject;
+import xyz.jamesnuge.slicktest.objects.basic.JumpPadObject;
 import xyz.jamesnuge.slicktest.objects.components.Controllable;
 import xyz.jamesnuge.slicktest.objects.components.EngineObject;
-import xyz.jamesnuge.slicktest.util.DebugUtilities;
-import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
-import xyz.jamesnuge.slicktest.util.SimulationProperties;
-import xyz.jamesnuge.slicktest.util.Viewport;
+import xyz.jamesnuge.slicktest.util.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +21,9 @@ public class Engine extends BasicGame {
 
     public final GameInfoWrapper gameInfo = new GameInfoWrapper();
 
-    private List<EngineObject> objects = new ArrayList<>();
+    public static final WorldContactListener worldContactListener = new WorldContactListener();
 
-    public List<KeyHandler<CircleObject>> circleKeyHandlers = new ArrayList<>();
-    public List<ReleaseKeyHandler<World>> worldKeyHandlers = new ArrayList<>();
+    private List<EngineObject> objects = new ArrayList<>();
 
     public World world = new World(new Vec2(0.0f, -10.0f));
     {
@@ -45,7 +39,10 @@ public class Engine extends BasicGame {
         world.setAllowSleep(true);
         objects.add(new BasicPlayerObject(Input.KEY_SPACE, Input.KEY_LEFT, Input.KEY_RIGHT, new Vec2(0, 2), new Vec2(0.1f, 0.2f), world));
         objects.add(new BasicPlatformObject(new Vec2(2, 1), new Vec2(2, 0.1f), world));
+        objects.add(new JumpPadObject(new Vec2(-1, 1), new Vec2(1, 0.1f), world));
         objects.add(new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world));
+
+        //TODO: Add listeners from the objects to the world listener
     }
 
     @Override
@@ -66,9 +63,6 @@ public class Engine extends BasicGame {
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         objects.stream().forEach(object -> object.draw(graphics));
-        DebugUtilities.drawAngle(graphics, objects.get(0).body);
         Viewport.drawViewportInfo(graphics);
     }
-
-
 }

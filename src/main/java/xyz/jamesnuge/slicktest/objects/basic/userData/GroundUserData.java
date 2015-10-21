@@ -17,11 +17,28 @@
 
 package xyz.jamesnuge.slicktest.objects.basic.userData;
 
+import org.jbox2d.callbacks.ContactListener;
+import xyz.jamesnuge.slicktest.objects.components.EngineObject;
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
 
-public class GroundUserData extends EngineObjectUserData {
+public class GroundUserData implements EngineObjectUserData {
     @Override
     public int getId() {
         return 0;
+    }
+
+    @Override
+    public ContactListener getContactListener() {
+        return null;
+    }
+
+    @Override
+    public Class<? extends EngineObject> getObjectClass() {
+        return null;
+    }
+
+    @Override
+    public boolean hasContactListener() {
+        return false;
     }
 }
