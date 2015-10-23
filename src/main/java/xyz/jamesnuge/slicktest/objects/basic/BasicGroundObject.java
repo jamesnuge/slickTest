@@ -39,7 +39,7 @@ public class BasicGroundObject extends RectangleObject<EngineObjectUserData> {
 
     @Override
     public List<FixtureDef> createFixtureDef() {
-        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize(), false));
     }
 
     @Override

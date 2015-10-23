@@ -63,6 +63,8 @@ public class Engine extends BasicGame {
 
     public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
         objects.stream().forEach(object -> object.draw(graphics));
+        DebugUtilities.drawPos(graphics, objects.get(0).body);
+        DebugUtilities.drawMiddleOfScreen(graphics);
         Viewport.drawViewportInfo(graphics);
     }
 }

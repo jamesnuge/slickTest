@@ -17,6 +17,7 @@
 
 package xyz.jamesnuge.slicktest.util;
 
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.newdawn.slick.Graphics;
 
@@ -34,6 +35,10 @@ public class DebugUtilities {
     public static void drawPos(Graphics g, Body b) {
         g.drawString("x: " + b.getPosition().x, 200, 200);
         g.drawString("y: " + b.getPosition().y, 200, 220);
+    }
+
+    public static void drawPoint(Graphics g, Vec2 point) {
+        g.drawRect(point.x, point.y, 1, 1);
     }
 
     public static void drawMiddleOfScreen(Graphics g) {

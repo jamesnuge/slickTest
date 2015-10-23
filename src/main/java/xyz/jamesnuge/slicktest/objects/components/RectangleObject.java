@@ -46,6 +46,13 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
     private Vec2 size;
 
+    /**
+     *
+     * @param pos This vector is the world coordinates of the rectangular object to be created
+     * @param size This is the size in metres that that rectangular shape should be. This takes the form of (w, h)
+     * @param world This is the world you are currently using. The object will be created in this world
+     * @param userData This is the user data you have specified for this object
+     */
     public RectangleObject(Vec2 pos, Vec2 size, World world, T userData) {
         super(userData);
         this.bodyDef = createBodyDef();

@@ -38,7 +38,7 @@ public class JumpPadObject extends RectangleObject<JumpPadUserData> {
 
     @Override
     public List<FixtureDef> createFixtureDef() {
-        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize(), false));
     }
 
     @Override
