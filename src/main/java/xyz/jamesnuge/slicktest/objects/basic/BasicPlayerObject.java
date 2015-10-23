@@ -19,6 +19,7 @@ import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 import xyz.jamesnuge.slicktest.util.GameInfoWrapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -39,6 +40,8 @@ public class BasicPlayerObject extends RectangleObject<EngineObjectUserData> imp
 
     public BasicPlayerObject(int jump, int left, int right, Vec2 pos, Vec2 size, World world) {
         super(pos, size, world, EmptyUserData.getInstance());
+
+        //this.body.setAngularDamping(300);
         setUserData(userData);
         addMoveRightHandler(right);
         addMoveLeftHandler(left);
@@ -87,6 +90,10 @@ public class BasicPlayerObject extends RectangleObject<EngineObjectUserData> imp
     @Override
     public void update() {
         super.update();
+        jumpHandler();
+    }
+
+    private void jumpHandler() {
         if (!isMovingY()) {
             if(!isJumping) {
                 numOfJumps = TOTAL_NUM_OF_JUMPS;
@@ -102,13 +109,15 @@ public class BasicPlayerObject extends RectangleObject<EngineObjectUserData> imp
 
 
     @Override
-    public FixtureDef createFixtureDef() {
-        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+    public List<FixtureDef> createFixtureDef() {
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
     }
 
     @Override
     public BodyDef createBodyDef() {
-        return BodyDefinitions.getDynamicBodyDef();
+        BodyDef def =  BodyDefinitions.getDynamicBodyDef();
+        //def.angularDamping = 32;
+        return def;
     }
 
     @Override

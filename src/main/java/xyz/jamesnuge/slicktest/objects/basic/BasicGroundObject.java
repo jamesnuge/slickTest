@@ -28,6 +28,9 @@ import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
+import java.util.Collections;
+import java.util.List;
+
 public class BasicGroundObject extends RectangleObject<EngineObjectUserData> {
 
     public BasicGroundObject(Vec2 pos, Vec2 size, World world) {
@@ -35,8 +38,8 @@ public class BasicGroundObject extends RectangleObject<EngineObjectUserData> {
     }
 
     @Override
-    public FixtureDef createFixtureDef() {
-        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+    public List<FixtureDef> createFixtureDef() {
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
     }
 
     @Override

@@ -25,6 +25,8 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Shape;
 
+import java.util.List;
+
 public abstract class EngineObject<T extends EngineObjectUserData> implements Updatable {
 
 
@@ -41,11 +43,11 @@ public abstract class EngineObject<T extends EngineObjectUserData> implements Up
     abstract Vec2 getWorldCoordinates();
     abstract Vec2 getViewportCoordinates();
 
-    public abstract FixtureDef createFixtureDef();
+    public abstract List<FixtureDef> createFixtureDef();
     public abstract BodyDef createBodyDef();
 
     protected abstract BodyDef getBodyDef();
-    protected abstract FixtureDef getFixtureDef();
+    protected abstract List<FixtureDef> getFixtureDefs();
 
     public void draw(Graphics graphics){
         graphics.draw(getGraphicalObject());

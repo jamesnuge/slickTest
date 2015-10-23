@@ -26,6 +26,9 @@ import xyz.jamesnuge.slicktest.objects.components.RectangleObject;
 import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
+import java.util.Collections;
+import java.util.List;
+
 public class JumpPadObject extends RectangleObject<JumpPadUserData> {
     public static JumpPadUserData USER_DATA = new JumpPadUserData();
 
@@ -34,8 +37,8 @@ public class JumpPadObject extends RectangleObject<JumpPadUserData> {
     }
 
     @Override
-    public FixtureDef createFixtureDef() {
-        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+    public List<FixtureDef> createFixtureDef() {
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
     }
 
     @Override

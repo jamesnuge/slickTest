@@ -27,6 +27,8 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
 
+import java.util.List;
+
 public abstract class RectangleObject<T extends EngineObjectUserData> extends EngineObject<T> {
 
     private Class userDataClass;
@@ -36,7 +38,7 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
 
 
     private BodyDef bodyDef;
-    private FixtureDef fixtureDef;
+    private List<FixtureDef> fixtureDefs;
 
     public Vec2 getSize() {
         return new Vec2(size);
@@ -50,8 +52,8 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
         this.bodyDef.position.set(pos);
         this.body = world.createBody(bodyDef);
         this.size = size;
-        this.fixtureDef = createFixtureDef();
-        body.createFixture(fixtureDef);
+        this.fixtureDefs = createFixtureDef();
+        fixtureDefs.stream().forEach(this::setFixtureToBody);
         rectangle = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
         graphicalObject = new Polygon(rectangle.getPoints());
     }
@@ -61,8 +63,8 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
         this.bodyDef.position.set(pos);
         this.body = world.createBody(bodyDef);
         this.size = size;
-        this.fixtureDef = createFixtureDef();
-        body.createFixture(fixtureDef);
+        this.fixtureDefs = createFixtureDef();
+        fixtureDefs.stream().forEach(this::setFixtureToBody);
         rectangle = new Rectangle(ConversionUtility.toViewportX(getCenterPos().x), ConversionUtility.toViewportY(getCenterPos().y), ConversionUtility.toPixelWidth(size.x), ConversionUtility.toPixelHeight(size.y));
         graphicalObject = new Polygon(rectangle.getPoints());
     }
@@ -90,13 +92,11 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
     public void update() {
         rectangle.setY(ConversionUtility.toViewportY(getCenterPos().y));
         rectangle.setX(ConversionUtility.toViewportX(getCenterPos().x));
-        if (body.getAngle() != 0) {
-            graphicalObject = rectangle.transform(Transform.createRotateTransform(ConversionUtility.toViewportAngle(body.getAngle()), rectangle.getCenterX(), rectangle.getCenterY()));
-        }
+        graphicalObject = rectangle.transform(Transform.createRotateTransform(ConversionUtility.toViewportAngle(body.getAngle()), rectangle.getCenterX(), rectangle.getCenterY()));
     }
 
     public Vec2 getCenterPos() {
-        return new Vec2(body.getPosition().x-this.size.x/2, body.getPosition().y + this.size.y/2);
+        return new Vec2(body.getPosition().x - this.size.x / 2, body.getPosition().y + this.size.y / 2);
     }
 
     @Override
@@ -105,13 +105,17 @@ public abstract class RectangleObject<T extends EngineObjectUserData> extends En
     }
 
     @Override
-    protected FixtureDef getFixtureDef() {
-        return fixtureDef;
+    protected List<FixtureDef> getFixtureDefs() {
+        return fixtureDefs;
     }
 
 
     public Vec2 getViewpointCenterPos() {
         return new Vec2();
+    }
+
+    private void setFixtureToBody(FixtureDef fixture) {
+        this.body.createFixture(fixture);
     }
 
     public void setUserDataClass(Class userDataClass) {

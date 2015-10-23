@@ -31,6 +31,9 @@ import xyz.jamesnuge.slicktest.util.BodyDefinitions;
 import xyz.jamesnuge.slicktest.util.ConversionUtility;
 import xyz.jamesnuge.slicktest.util.FixtureDefinitions;
 
+import java.util.Collections;
+import java.util.List;
+
 public class BasicPlatformObject extends RectangleObject<EngineObjectUserData> {
     public BasicPlatformObject(Vec2 pos, Vec2 size, World world) {
         super(pos, size, world, EmptyUserData.getInstance());
@@ -50,8 +53,8 @@ public class BasicPlatformObject extends RectangleObject<EngineObjectUserData> {
     }
 
     @Override
-    public FixtureDef createFixtureDef() {
-        return FixtureDefinitions.getRectangleFixtureDefinition(this.getSize());
+    public List<FixtureDef> createFixtureDef() {
+        return Collections.singletonList(FixtureDefinitions.getRectangleFixtureDefinition(this.getSize()));
     }
 
     @Override

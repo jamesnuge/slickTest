@@ -23,13 +23,15 @@ import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import xyz.jamesnuge.slicktest.objects.components.CircleObject;
 
+import java.util.List;
+
 public class TestEngineObject extends CircleObject<TestObjectUserData> {
     public TestEngineObject(Vec2 pos, float radius, World world, BodyDef bodyDef) {
         super(pos, radius, world, bodyDef);
     }
 
     @Override
-    public FixtureDef createFixtureDef() {
+    public List<FixtureDef> createFixtureDef() {
         return null;
     }
 
@@ -44,7 +46,7 @@ public class TestEngineObject extends CircleObject<TestObjectUserData> {
     }
 
     @Override
-    protected FixtureDef getFixtureDef() {
+    protected List<FixtureDef> getFixtureDefs() {
         return null;
     }
 

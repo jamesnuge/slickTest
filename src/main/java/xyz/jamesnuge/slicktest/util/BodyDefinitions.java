@@ -22,6 +22,12 @@ import org.jbox2d.dynamics.BodyType;
 
 public class BodyDefinitions {
 
+    public static BodyDef getDynamicBodyDefWithoutRotation() {
+        BodyDef def = getBodyDef(BodyType.DYNAMIC);
+        def.fixedRotation = true;
+        return getBodyDef(BodyType.DYNAMIC);
+    }
+
     public static BodyDef getDynamicBodyDef() {
         return getBodyDef(BodyType.DYNAMIC);
     }
