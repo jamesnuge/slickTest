@@ -34,6 +34,7 @@ public class JumpPadObject extends RectangleObject<JumpPadUserData> {
 
     public JumpPadObject(Vec2 pos, Vec2 size, World world) {
         super(pos, size, world, USER_DATA);
+        this.body.getFixtureList().setUserData(USER_DATA);
     }
 
     @Override

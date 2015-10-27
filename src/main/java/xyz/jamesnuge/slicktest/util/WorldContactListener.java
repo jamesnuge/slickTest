@@ -31,29 +31,53 @@ public class WorldContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        fixtureContactListenerMap.get(contact.getFixtureA()).beginContact(contact);
-        fixtureContactListenerMap.get(contact.getFixtureB()).beginContact(contact);
+        System.out.println("world contact");
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureA())) {
+            fixtureContactListenerMap.get(contact.getFixtureA()).beginContact(contact);
+        }
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureB())) {
+            fixtureContactListenerMap.get(contact.getFixtureB()).beginContact(contact);
+        }
+
     }
 
     @Override
     public void endContact(Contact contact) {
-        fixtureContactListenerMap.get(contact.getFixtureA()).endContact(contact);
-        fixtureContactListenerMap.get(contact.getFixtureB()).endContact(contact);
+        System.out.println("world contact");
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureA())) {
+            fixtureContactListenerMap.get(contact.getFixtureA()).endContact(contact);
+        }
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureB())) {
+            fixtureContactListenerMap.get(contact.getFixtureB()).endContact(contact);
+        }
+
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        fixtureContactListenerMap.get(contact.getFixtureA()).preSolve(contact, oldManifold);
-        fixtureContactListenerMap.get(contact.getFixtureB()).preSolve(contact, oldManifold);
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureA())) {
+            fixtureContactListenerMap.get(contact.getFixtureA()).preSolve(contact, oldManifold);
+        }
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureB())) {
+            fixtureContactListenerMap.get(contact.getFixtureB()).preSolve(contact, oldManifold);
+        }
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        fixtureContactListenerMap.get(contact.getFixtureA()).postSolve(contact, impulse);
-        fixtureContactListenerMap.get(contact.getFixtureB()).postSolve(contact, impulse);
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureA())) {
+            fixtureContactListenerMap.get(contact.getFixtureA()).postSolve(contact, impulse);
+        }
+        if (fixtureContactListenerMap.containsKey(contact.getFixtureB())) {
+            fixtureContactListenerMap.get(contact.getFixtureB()).postSolve(contact, impulse);
+        }
     }
 
     public void addListener(Fixture fixture, ContactListener listener) {
-        fixtureContactListenerMap.put(fixture, listener);
+        if (fixture.getUserData() == null) {
+            throw new IllegalStateException("Fixture must contain user data to add listener");
+        } else {
+            fixtureContactListenerMap.put(fixture, listener);
+        }
     }
 }

@@ -23,21 +23,26 @@ import org.jbox2d.collision.Manifold;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.contacts.Contact;
-import xyz.jamesnuge.slicktest.objects.basic.BasicPlayerObject;
 import xyz.jamesnuge.slicktest.objects.components.EngineObjectUserData;
+import xyz.jamesnuge.slicktest.util.ContactListenerUtil;
 
 public class JumpPadContactListener implements ContactListener {
     public static final int JUMP_PAD_FIXTURE_ID = 0x0000;
 
     @Override
     public void beginContact(Contact contact) {
+        System.out.println("Made contact");
         Fixture padFixture;
         Fixture objectFixture;
 
         Fixture a = contact.getFixtureA();
         Fixture b = contact.getFixtureB();
+        if (!ContactListenerUtil.fixtureNullCheck(a, b)) {
+            //Log error message
+            return;
+        }
 
-        if (((EngineObjectUserData)a.getUserData()).getId() == JUMP_PAD_FIXTURE_ID) {
+        if ( a.getUserData()!= null &&((EngineObjectUserData)a.getUserData()).getId() == JUMP_PAD_FIXTURE_ID) {
             padFixture = a;
             objectFixture = b;
         } else {
@@ -49,7 +54,8 @@ public class JumpPadContactListener implements ContactListener {
             }
         }
         System.out.println("Applying jump force");
-        objectFixture.getBody().applyForceToCenter(new Vec2(0, BasicPlayerObject.JUMP_FORCE));
+        objectFixture.getBody().setLinearVelocity(new Vec2(objectFixture.getBody().getLinearVelocity().x, 0f));
+        objectFixture.getBody().applyForceToCenter(new Vec2(0, 5f));
     }
 
     @Override

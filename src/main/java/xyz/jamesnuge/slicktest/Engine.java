@@ -43,12 +43,20 @@ public class Engine extends BasicGame {
         objects.add(new BasicGroundObject(new Vec2(0f,0f), new Vec2(8f, 0.2f), world));
 
         //TODO: Add listeners from the objects to the world listener
+        objects.stream().forEach(object -> {
+                if(object.hasContactListener()) {
+                    worldContactListener.addListener(object.body.getFixtureList(), object.getContactListener());
+                }
+        });
+        world.setContactListener(worldContactListener);
+
     }
 
     @Override
     public void update(GameContainer gameContainer, int i) throws SlickException {
         gameInfo.update(gameContainer, i);
         updateWorld();
+        //TODO: Ew...gross...fix this you muppet
         objects.stream().forEach(object -> {
             if (object instanceof Controllable) {
                 ((Controllable<?>)object).getKeyHandlers().stream().forEach(handler -> handler.consume(gameInfo));
